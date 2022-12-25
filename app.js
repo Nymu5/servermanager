@@ -3,9 +3,14 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var constDB = require('./db');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var adminRouter = require('./routes/admin');
+var profileRouter = require('./routes/profile');
+var apiRouter = require('./routes/api');
+var { auth_view, auth_admin} = require('./auth/auth');
 
 var app = express();
 
@@ -19,8 +24,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', apiRouter);
+app.use('/', auth_view, indexRouter);
+app.use('/profile', profileRouter);
+app.use('/admin', auth_view, adminRouter);
+app.use('/users', auth_view, usersRouter);
+app.get("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 })
+  res.redirect("/")
+})
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

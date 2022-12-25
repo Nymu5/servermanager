@@ -1,0 +1,154 @@
+extends layout
+
+block content
+  div.mt-4
+    p.mt-1.max-w-2xl.text-sm.text-gray-500 Personal details.
+  .mt-5.border-t.border-gray-200
+    dl.divide-y.divide-gray-200
+      .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5')
+        dt.text-sm.font-medium.text-gray-500.self-center Username
+        dd.mt-1.flex.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
+          span.flex-grow.self-center=user.username
+      .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5')
+        dt.text-sm.font-medium.text-gray-500 Password
+        dd.mt-1.flex.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
+          span.flex-grow.self-center ********
+      .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5')
+        dt.text-sm.font-medium.text-gray-500 Role
+        dd.mt-1.flex.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
+          if (user.role_name == "admin")
+            span.flex-grow.text-red-800=user.role_name
+          else
+            span.flex-grow=user.role_name
+      .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5')
+        dt.text-sm.font-medium.text-gray-500 Permissions
+        dd.mt-1.flex.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
+          span.flex-grow
+            each permission in Object.keys(permissions)
+              if (permissions[permission] == true)
+                span=permission + ": "
+                span.text-green-600=permissions[permission]
+                br
+  .grid.grid-cols-1.gap-4.mt-8(class='sm:grid-cols-2')
+    .mb-auto.relative.flex.items-center.space-x-3.rounded-lg.border.border-gray-300.bg-white.px-6.py-5.shadow-sm(class='focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 hover:border-gray-400')
+      .flex-shrink-0.self-start
+        svg.w-10.h-10(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+          path(stroke-linecap='round', stroke-linejoin='round', d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z')
+      .min-w-0.flex-1.self-start.mb-2
+        div(class='focus:outline-none')
+          p.text-lg.font-large.text-gray-900.font-bold Change Username
+          .mt-6
+            form.space-y-6(action='#', method='POST')
+              div
+                label.block.text-sm.font-medium.text-gray-700(for='username_new') New Username
+                .mt-1
+                  input#username_new.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='username_new', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+              div
+                button#username_new_submit.flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.py-2.px-4.text-sm.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Change Username
+        .border-l-4.border-red-400.bg-red-50.p-4.mt-4#username_fail_banner.hidden
+          .flex
+            .flex-shrink-0
+              // Heroicon name: mini/exclamation-triangle
+              svg.h-5.w-5.text-red-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                path(fill-rule='evenodd', d='M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z', clip-rule='evenodd')
+            .ml-3
+              p#username_fail_banner_text.text-sm.text-red-700 Error Message
+        .border-l-4.border-green-400.bg-green-50.p-4.mt-4#username_success_banner.hidden
+          .flex
+            .flex-shrink-0
+              // Heroicon name: mini/exclamation-triangle
+              svg.text-green-400.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                path(stroke-linecap='round', stroke-linejoin='round', d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
+            .ml-3
+              p.text-sm.text-green-700#username_success_banner_text Success Message
+    .mb-auto.relative.flex.items-center.space-x-3.rounded-lg.border.border-gray-300.bg-white.px-6.py-5.shadow-sm(class='focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 hover:border-gray-400')
+      .flex-shrink-0.self-start
+        svg.w-10.h-10(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+          path(stroke-linecap='round', stroke-linejoin='round', d='M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z')
+      .min-w-0.flex-1.self-start.mb-2
+        div(class='focus:outline-none')
+          p.text-lg.font-large.text-gray-900.font-bold Change Password
+          .mt-6
+            form.space-y-6(action='#', method='POST')
+              div
+                label.block.text-sm.font-medium.text-gray-700(for='password_new') Current Password
+                .mt-1
+                  input#password_old.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='password', type='password', autocomplete='current-password', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+              .space-y-1
+                label.block.text-sm.font-medium.text-gray-700(for='password_new') New Password
+                .mt-1
+                  input#password_new.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='password', type='password', autocomplete='current-password', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+              .space-y-1
+                label.block.text-sm.font-medium.text-gray-700(for='password_new_confirm') Confirm Password
+                .mt-1
+                  input#password_new_confirm.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='password', type='password', autocomplete='current-password', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+              div
+                button#password_new_submit.flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.py-2.px-4.text-sm.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Change Password
+        .border-l-4.border-red-400.bg-red-50.p-4.mt-4#password_fail_banner.hidden
+          .flex
+            .flex-shrink-0
+              // Heroicon name: mini/exclamation-triangle
+              svg.h-5.w-5.text-red-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                path(fill-rule='evenodd', d='M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z', clip-rule='evenodd')
+            .ml-3
+              p#password_fail_banner_text.text-sm.text-red-700 Error Message
+        .border-l-4.border-green-400.bg-green-50.p-4.mt-4#password_success_banner.hidden
+          .flex
+            .flex-shrink-0
+              // Heroicon name: mini/exclamation-triangle
+              svg.text-green-400.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                path(stroke-linecap='round', stroke-linejoin='round', d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
+            .ml-3
+              p#password_success_banner_text.text-sm.text-green-700 Success Message
+
+
+  script.
+    let qrefresh = false;
+    document.getElementById("username_new_submit").addEventListener("click", function(event) {
+      event.preventDefault();
+      let data = {
+        username: document.getElementById("username_new").value,
+      }
+      $.ajax({
+        type: 'PUT',
+        url: "/api/auth/user/update/username",
+        contentType: "application/json",
+        data: JSON.stringify(data)
+      }).done(function (data, textStatus, xhr) {
+        document.getElementById("username_fail_banner").classList.add("hidden");
+        document.getElementById("username_success_banner_text").innerHTML = xhr.responseJSON.message;
+        document.getElementById("username_success_banner").classList.remove("hidden");
+        setTimeout(function() {
+          location.reload();
+        }, 1000);
+      }).fail(function (data, textStatus, xhr) {
+        document.getElementById("username_success_banner").classList.add("hidden");
+        document.getElementById("username_fail_banner_text").innerHTML = data.responseJSON.message;
+        document.getElementById("username_fail_banner").classList.remove("hidden");
+      })
+    })
+    document.getElementById("password_new_submit").addEventListener("click", function(event) {
+      event.preventDefault();
+      let data = {
+        old_password: document.getElementById("password_old").value,
+        new_password: document.getElementById("password_new").value,
+        new_password_confirm: document.getElementById("password_new_confirm").value
+      }
+      $.ajax({
+        type: "PUT",
+        url: "/api/auth/user/update/password",
+        contentType: "application/json",
+        data: JSON.stringify(data)
+      }).done(function (data, textStatus, xhr) {
+        document.getElementById("password_fail_banner").classList.add("hidden");
+        document.getElementById("password_success_banner_text").innerHTML = xhr.responseJSON.message;
+        document.getElementById("password_success_banner").classList.remove("hidden");
+        setTimeout(function () {
+          location.reload();
+        }, 1000);
+      }).fail(function (data, textStatus, xhr) {
+        document.getElementById("password_success_banner").classList.add("hidden");
+        document.getElementById("password_fail_banner_text").innerHTML = data.responseJSON.message;
+        document.getElementById("password_fail_banner").classList.remove("hidden");
+      })
+    })

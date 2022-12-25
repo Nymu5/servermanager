@@ -1,0 +1,70 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/stylesheet.css')
+  body
+    svg.fixed.bottom-0(xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320')
+      path(fill='#1f2937' fill-opacity='1' d='M0,0L12,32C24,64,48,128,72,154.7C96,181,120,171,144,160C168,149,192,139,216,149.3C240,160,264,192,288,218.7C312,245,336,267,360,261.3C384,256,408,224,432,218.7C456,213,480,235,504,245.3C528,256,552,256,576,234.7C600,213,624,171,648,165.3C672,160,696,192,720,202.7C744,213,768,203,792,170.7C816,139,840,85,864,74.7C888,64,912,96,936,138.7C960,181,984,235,1008,240C1032,245,1056,203,1080,197.3C1104,192,1128,224,1152,224C1176,224,1200,192,1224,202.7C1248,213,1272,267,1296,250.7C1320,235,1344,149,1368,138.7C1392,128,1416,192,1428,224L1440,256L1440,320L1428,320C1416,320,1392,320,1368,320C1344,320,1320,320,1296,320C1272,320,1248,320,1224,320C1200,320,1176,320,1152,320C1128,320,1104,320,1080,320C1056,320,1032,320,1008,320C984,320,960,320,936,320C912,320,888,320,864,320C840,320,816,320,792,320C768,320,744,320,720,320C696,320,672,320,648,320C624,320,600,320,576,320C552,320,528,320,504,320C480,320,456,320,432,320C408,320,384,320,360,320C336,320,312,320,288,320C264,320,240,320,216,320C192,320,168,320,144,320C120,320,96,320,72,320C48,320,24,320,12,320L0,320Z')
+    .flex.min-h-full.items-center.justify-center.py-12.px-4(class='sm:px-6 lg:px-8')
+      .w-full.max-w-md.space-y-8
+        div
+          img.mx-auto.h-12.w-auto(src='/assets/images/logo_nymus_1mb.png' alt='Your Company')
+          h2.mt-6.text-center.text-3xl.font-bold.tracking-tight.text-gray-900 Sign in to your account
+        form.mt-8.space-y-6(action='#' method='POST')
+          input(type='hidden' name='remember' value='true')
+          .-space-y-px.rounded-md.shadow-sm
+            div
+              label.sr-only(for='username') Username
+              input#username.relative.block.w-full.appearance-none.rounded-none.rounded-t-md.border.border-gray-300.px-3.py-2.text-gray-900.placeholder-gray-500(name='email' type='email' autocomplete='email' required='' class='focus:z-10 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm' placeholder='Username')
+            div
+              label.sr-only(for='password') Password
+              input#password.relative.block.w-full.appearance-none.rounded-none.rounded-b-md.border.border-gray-300.px-3.py-2.text-gray-900.placeholder-gray-500(name='password' type='password' autocomplete='current-password' required='' class='focus:z-10 focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm' placeholder='Password')
+          .flex.items-center.justify-between.hidden
+            .flex.items-center
+              input#remember-me.h-4.w-4.rounded.border-gray-300.text-emerald-600(name='remember-me' type='checkbox' class='focus:ring-emerald-500')
+              label.ml-2.block.text-sm.text-gray-900(for='remember-me') Remember me
+            .text-sm
+              a.font-medium.text-emerald-600(href='#' class='hover:text-emerald-500') Forgot your password?
+          .flex.items-center.justify-between
+            .flex.items-center
+              span.text-red-600.text-sm.text-transparent#invalid-text Login failed, check credentials.
+          div
+            button#button-login.mt-8.group.relative.flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.py-2.px-4.text-sm.font-medium.text-white(type='submit' class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2')
+              span.absolute.inset-y-0.left-0.flex.items-center.pl-3
+                // Heroicon name: mini/lock-closed
+                svg.h-5.w-5.text-emerald-500(class='group-hover:text-emerald-400' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor' aria-hidden='true')
+                  path(fill-rule='evenodd' d='M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z' clip-rule='evenodd')
+              |           Sign in
+    script.
+      document.getElementById("button-login").addEventListener("click", function (event) {
+        event.preventDefault();
+        login();
+      });
+      function login() {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+
+        let xhr = new XMLHttpRequest();
+        let url = '/api/auth/user/login';
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status >= 300) {
+            document.getElementById("invalid-text").classList.remove("text-transparent");
+          } else if (this.readyState == 4) {
+            document.getElementById("invalid-text").classList.remove("text-transparent");
+            document.getElementById("invalid-text").classList.add("text-lime-600");
+            document.getElementById("invalid-text").innerHTML = "Login successful!"
+            setTimeout(function () {
+              location.reload();
+            }, 1500);
+          }
+        }
+        xhr.send(JSON.stringify({
+          username,
+          password
+        }));
+      }
+
+
