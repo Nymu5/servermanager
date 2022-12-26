@@ -16,6 +16,5 @@ exports.permissioner = async (req, res, next) => {
             message: "Missing permissions - please contact admin!"
         })
     }
-
     next();
 }
