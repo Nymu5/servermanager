@@ -50,7 +50,6 @@ router.get('/', auth_admin, async function(req, res, next) {
     let cat = permission.split("_")[0];
     if (permission_categories.indexOf(cat) == -1) permission_categories.push(cat);
   })
-  console.log(res.locals.permissions)
   res.render('admin', { title: 'Admin | NSM', header: 'Admin', username: res.locals.username, permissions: permissions, permission_categories: permission_categories, users: users_censored_obj, roles: roles_mapped, userpermissions: res.locals.permissions });
 });
 

@@ -180,7 +180,6 @@ exports.user_change = async (req, res, next) => {
 
 exports.user_username_change_self = async (req, res, next) => {
     const { username } = req.body;
-    console.log(username)
     const token  = req.cookies.jwt;
     if (!token) {
         return res.status(401).json({

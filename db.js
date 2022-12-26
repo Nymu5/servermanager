@@ -1,8 +1,12 @@
 const Mongoose = require("mongoose");
-const localDB = `mongodb://localhost:27017/app_nymus_servermanager`
+const bcrypt = require("bcryptjs");
+
+const localDB = `mongodb://127.0.0.1:27017/app_nymus_servermanager`
 const Role = require("./model/Role")
+const User = require("./model/User")
 
 const fs = require('fs');
+const jwt = require("jsonwebtoken");
 const svfunc_folder = "./svfunc/";
 
 let permission_names
@@ -39,6 +43,21 @@ const connectDB = async () => {
         }).catch((err) => {
             console.log(`[ERROR] ${err.message}`);
         })
+    }
+    const admin_user = await User.findOne();
+    if (!admin_user) {
+        bcrypt.hash("nsm_master_password", 10).then(async (hash) => {
+            const admin_role = await Role.findOne({ name: "admin" });
+            await User.create({
+                username: "admin",
+                password: hash,
+                role: admin_role._id,
+            }).then((user) => {
+                console.log("Admin user created! Change password ASAP!")
+            }).catch((err) => {
+                console.log("Error creating admin account!")
+            })
+        });
     }
 
 
