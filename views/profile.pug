@@ -16,7 +16,7 @@ block content
       .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5')
         dt.text-sm.font-medium.text-gray-500 Role
         dd.mt-1.flex.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
-          if (user.role_name == "admin")
+          if (userpermissions.admin)
             span.flex-grow.text-red-800=user.role_name
           else
             span.flex-grow=user.role_name

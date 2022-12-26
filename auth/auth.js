@@ -263,6 +263,113 @@ exports.user_password_change_self = async (req, res, next) => {
     })
 }
 
+exports.role_permission_change = async (req, res, next) => {
+    const { _id, permissions } = req.body;
+    if (!_id || !permissions) {
+        return res.status(400).json({
+            message: "ID or permissions missing"
+        })
+    }
+    await Role.findById(_id)
+        .then((role) => {
+            if (!role) {
+                return res.status(400).json({
+                    message: "Role not found",
+                })
+            }
+            role.permissions = permissions;
+            role.save((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: `An error occurred: ${err.message}`,
+                    })
+                }
+                return res.status(200).json({
+                    message: "Role permissions updated successfully"
+                })
+            })
+        }).catch((err) => {
+            return res.status(400).json({
+                message: `An error occurred: ${err.message}`,
+            })
+        })
+}
+
+exports.role_delete = async (req, res, next) => {
+    const { _id } = req.body;
+    await Role.findById(_id)
+        .then(async (role) => {
+            if (!_id || !role) {
+                return res.status(400).json({
+                    message: "ID missing or role not found",
+                })
+            }
+            if (role.name == "admin" || role.name == "basic") {
+                return res.status(400).json({
+                    message: "Cannot delete basic or admin role"
+                })
+            }
+            const basic = await Role.findOne({ name: "basic" });
+            if (!basic) {
+                return res.status(500).json({
+                    message: "Basic role not found"
+                })
+            }
+            try {
+                await User.updateMany({ role: role._id }, { role: basic._id });
+            } catch (err) {
+                return res.status(500).json({
+                    message: `An error occurred: ${err.message}`
+                })
+            }
+            role.delete((err) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: `An error occurred: ${err.message}`
+                    })
+                }
+                return res.status(200).json({
+                    message: "Role deleted successfully"
+                })
+            })
+        }).catch((err) => {
+            return res.status(400).json({
+                message: `An error occurred: ${err.message}`,
+            })
+        })
+}
+
+exports.role_create = async (req, res, next) => {
+    const { name, template_id } = req.body;
+    if (!name) {
+        return res.status(400).json({
+            message: "Name or permissions not specified",
+        })
+    }
+    let permissions = {};
+    const template = await Role.findById(template_id);
+    if (template != null) {
+        permissions = template.permissions;
+    } else {
+        Object.keys((await Role.findOne()).permissions).forEach((permission) => {
+            permissions[permission] = false;
+        });
+    }
+
+    await Role.create({
+        name,
+        permissions
+    }).then((role) => {
+        return res.status(201).json({
+            message: `Role ${role.name} created successfully`,
+        })
+    }).catch((err) => {
+        return res.status(400).json({
+            message: `An error occurred: ${err.message}`
+        })
+    })
+}
+
 exports.auth_admin = async (req, res, next) => {
     const token = req.cookies.jwt;
     if (!token) {
@@ -276,16 +383,25 @@ exports.auth_admin = async (req, res, next) => {
                 message: `An error occurred: ${err.message}`
             })
         }
-        const role = await Role.findById(decodedToken.role);
-        if (role.name !== "admin") return res.status(401).json({
-            message: "Not authorized: not an admin"
-        })
+        const user = await User.findById(decodedToken.id);
+        const role = await Role.findById(user.role);
+        if (!role || !user) {
+            return res.status(401).json({
+                message: "Not authorized: Check token"
+            })
+        }
+        if (!role.permissions["admin"]) {
+            return res.status(401).json({
+                message: "Not authorized: not an admin"
+            })
+        }
         next();
     })
 }
 
 exports.auth_user = async (req, res, next) => {
     const token = req.cookies.jwt;
+    const url = req.originalUrl;
     if (!token) {
         return res.status(401).json({
             message: "Not authorized: Token not available"
@@ -297,12 +413,15 @@ exports.auth_user = async (req, res, next) => {
                 message: "Not authorized: Check token"
             });
         }
-        const role = await Role.findById(decodedToken.role);
-        if (!role) {
+        const user = await User.findById(decodedToken.id);
+        const role = await Role.findById(user.role);
+        if (err || !role || !user) {
             return res.status(401).json({
                 message: "Not authorized: Check token"
             })
         }
+        res.locals.user = user;
+        res.locals.url = url;
         res.locals.permissions = role.permissions;
         next();
     })

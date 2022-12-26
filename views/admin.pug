@@ -1,11 +1,6 @@
 extends layout
 
 block content
-  button.px-4.mt-8.inline-flex.items-center.rounded-full.border.border-transparent.bg-gray-800.p-1.text-white.shadow-sm(type='button', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_user_create()")
-    // Heroicon name: mini/plus
-    svg.h-5.w-5(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
-      path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
-    span New User
   main.flex-1
     .mt-8
       .inline-block.min-w-full.border-b.border-gray-200.align-middle
@@ -21,7 +16,7 @@ block content
               tr
                 td.w-full.max-w-0.whitespace-nowrap.px-6.py-3.text-sm.font-medium.text-gray-900
                   .flex.items-center.space-x-3(class='lg:pl-2')
-                    if (user.role_name == "Admin")
+                    if (roles[user.role_id].permissions.admin)
                       .flex-shrink-0.rounded-full.bg-red-800(class='w-2.5 h-2.5', aria-hidden='true')
                     else
                       .flex-shrink-0.rounded-full.bg-transparent(class='w-2.5 h-2.5', aria-hidden='true')
@@ -30,7 +25,7 @@ block content
                 td.px-6.py-3.text-sm.font-medium.text-gray-500
                   .flex.items-center.space-x-2
                     .flex.flex-shrink-0.-space-x-1
-                      if (user.role_name == "Admin")
+                      if (roles[user.role_id].permissions.admin)
                         span.flex-shrink-0.text-xs.font-medium.leading-5.text-red-800=user.role_name
                       else
                         span.flex-shrink-0.text-xs.font-medium.leading-5=user.role_name
@@ -191,6 +186,15 @@ block content
         //status_text(document.getElementById("role-error-text"), (textStatus == "success" ? xhr : data));
       });
     });
+  .relative.mt-4
+    .absolute.inset-0.flex.items-center(aria-hidden='true')
+      .w-full.border-t.border-gray-300
+    .relative.flex.justify-center
+      button.inline-flex.items-center.rounded-full.border.border-gray-300.bg-white.px-4.text-sm.font-medium.leading-5.text-gray-700.shadow-sm(type='button', class='py-1.5 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_user_create()")
+        // Heroicon name: mini/plus
+        svg.mr-1.h-5.w-5.text-gray-400(class='-ml-1.5', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+          path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
+        span Add User
 
 
   script.
@@ -367,7 +371,6 @@ block content
         username: document.getElementById("user_create_username").value,
         password: document.getElementById("user_create_password").value,
       }
-      console.log(data);
 
       $.ajax({
         type: 'POST',
@@ -383,3 +386,301 @@ block content
       });
     });
 
+  main.flex-1
+    .mt-8
+      .inline-block.min-w-full.border-b.border-gray-200.align-middle
+        table.min-w-full
+          thead
+            tr.border-t.border-gray-200
+              th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col')
+                span(class='lg:pl-2').align-middle Role
+              th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col') ID
+              th.border-b.border-gray-200.bg-gray-50.py-3.pr-6.text-right.text-sm.font-semibold.text-gray-900(scope='col')
+          tbody.divide-y.divide-gray-100.bg-white
+            each role in roles
+              tr
+                td.w-full.max-w-0.whitespace-nowrap.px-6.py-3.text-sm.font-medium.text-gray-900
+                  .flex.items-center.space-x-3(class='lg:pl-2')
+                    if (role.permissions.admin)
+                      .flex-shrink-0.rounded-full.bg-red-800(class='w-2.5 h-2.5', aria-hidden='true')
+                    else
+                      .flex-shrink-0.rounded-full.bg-transparent(class='w-2.5 h-2.5', aria-hidden='true')
+                    a.truncate(href='#', class='hover:text-gray-600')
+                      span=role.name
+                td.px-6.py-3.text-sm.font-medium.text-gray-500
+                  .flex.items-center.space-x-2
+                    .flex.flex-shrink-0.-space-x-1
+                      if (role.permissions.admin)
+                        span.flex-shrink-0.text-xs.font-medium.leading-5.text-red-800=role._id
+                      else
+                        span.flex-shrink-0.text-xs.font-medium.leading-5=role._id
+                td.whitespace-nowrap.px-6.py-3.text-right.text-sm.font-medium
+                  a.text-emerald-600(href='#', class='hover:text-emerald-900', onClick="role_edit('" + role._id + "')") Edit
+              // More projects...
+  .relative.mt-4
+    .absolute.inset-0.flex.items-center(aria-hidden='true')
+      .w-full.border-t.border-gray-300
+    .relative.flex.justify-center
+      button.inline-flex.items-center.rounded-full.border.border-gray-300.bg-white.px-4.text-sm.font-medium.leading-5.text-gray-700.shadow-sm(type='button', class='py-1.5 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_role_create()")
+        // Heroicon name: mini/plus
+        svg.mr-1.h-5.w-5.text-gray-400(class='-ml-1.5', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+          path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
+        span Add Role
+  #role_edit_backdrop.pointer-events-none.relative.z-10(aria-labelledby='slide-over-title', role='dialog', aria-modal='true')
+    // Background backdrop, show/hide based on slide-over state.
+    .fixed.inset-0
+    .fixed.inset-0.overflow-hidden
+      .absolute.inset-0.overflow-hidden
+        #role_edit_panel.pointer-events-none.fixed.inset-y-0.right-0.flex.max-w-full.pl-10(class='sm:pl-16 transform transition ease-in-out duration-500 sm:duration-700 translate-x-full')
+          //
+            Slide-over panel, show/hide based on slide-over state.
+            Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+            From: "translate-x-full"
+            To: "translate-x-0"
+            Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+            From: "translate-x-0"
+            To: "translate-x-full"
+          .pointer-events-auto.w-screen.max-w-md
+            .flex.h-full.flex-col.overflow-y-scroll.bg-white.shadow-xl
+              .p-6
+                .flex.items-start.justify-between
+                  h2.text-lg.font-medium.text-gray-900 Permissions
+                  .ml-3.flex.h-7.items-center
+                    span.isolate.inline-flex.rounded-md.shadow-sm.mr-4
+                      button#edit_role_delete.relative.inline-flex.items-center.rounded-l-md.border.border-red-300.bg-white.px-4.py-2.text-sm.font-medium.text-red-700(type='button', class='hover:bg-red-50 focus:z-10 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500') Delete
+                      button#edit_role_save.relative.-ml-px.inline-flex.items-center.rounded-r-md.border.border-green-300.bg-white.px-4.py-2.text-sm.font-medium.text-green-700(type='button', class='hover:bg-green-50 focus:z-10 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500') Save
+                    //button#edit_role_save.inline-flex.items-center.rounded-full.border.border-transparent.bg-green-600.px-4.py-2.text-sm.font-medium.text-white.shadow-sm.mr-4(type='button', class='hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2') Save
+                    button.rounded-md.bg-white.text-gray-400(type='button', class='hover:text-gray-500 focus:ring-2 focus:ring-emerald-500', onclick="hide_role_edit()")
+                      span.sr-only Close panel
+                      // Heroicon name: outline/x-mark
+                      svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                        path(stroke-linecap='round', stroke-linejoin='round', d='M6 18L18 6M6 6l12 12')
+              .border-l-4.border-red-400.bg-red-50.p-4.mb-4#role_edit_fail_banner.hidden
+                .flex
+                  .flex-shrink-0
+                    // Heroicon name: mini/exclamation-triangle
+                    svg.h-5.w-5.text-red-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                      path(fill-rule='evenodd', d='M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z', clip-rule='evenodd')
+                  .ml-3
+                    p#role_edit_fail_banner_text.text-sm.text-red-700 Error Message
+              .border-l-4.border-green-400.bg-green-50.p-4.mb-4#role_edit_success_banner.hidden
+                .flex
+                  .flex-shrink-0
+                    // Heroicon name: mini/exclamation-triangle
+                    svg.text-green-400.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                      path(stroke-linecap='round', stroke-linejoin='round', d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
+                  .ml-3
+                    p#role_edit_success_banner_text.text-sm.text-green-700 Success Message
+
+              .border-b.border-gray-200
+                .px-6
+                  nav.-mb-px.flex.space-x-6
+                    // Current: "border-emerald-500 text-emerald-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    a.permission_selector.cursor-pointer.border-emerald-500.text-emerald-600.whitespace-nowrap.pb-4.px-1.border-b-2.font-medium.text-sm(id="selector_null", onclick="role_category_toggle()") All
+                    each permission_category in permission_categories
+                      a.permission_selector.cursor-pointer.border-transparent.text-gray-500.whitespace-nowrap.pb-4.px-1.border-b-2.font-medium.text-sm(id="selector_"+permission_category, onclick="role_category_toggle('" + permission_category + "')", class='hover:text-gray-700 hover:border-gray-300')=permission_category
+              ul.p-4.category_selector_item.flex-1.divide-y.divide-gray-200.overflow-y-auto(id="selector_item_null", role='list')
+                each permission in permissions
+                  li.m-2.pt-2
+                    .relative.flex.items-start
+                      .flex.h-5.items-center
+                        input.h-4.w-4.rounded.border-gray-300.text-emerald-600(id=permission, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500 '+permission, onchange="role_edit_toggle_permission('" + permission + "')")
+                      .ml-3.text-sm
+                        label.font-medium.text-gray-700(for=permission)=permission
+              each permission_category in permission_categories
+                ul.p-4.hidden.category_selector_item.flex-1.divide-y.divide-gray-200.overflow-y-auto(id="selector_item_"+permission_category, role='list')
+                  each permission in permissions
+                    if permission.startsWith(permission_category)
+                      li.m-2.pt-2
+                        .relative.flex.items-start
+                          .flex.h-5.items-center
+                            input.h-4.w-4.rounded.border-gray-300.text-emerald-600(id=permission, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500 '+permission, onchange="role_edit_toggle_permission('" + permission + "')")
+                          .ml-3.text-sm
+                            label.font-medium.text-gray-700(for=permission)=permission
+
+
+  script.
+    function role_category_toggle(category = null) {
+      let category_selectors = document.getElementsByClassName("permission_selector")
+      let category_selector_items = document.getElementsByClassName("category_selector_item")
+      for (let i = 0; i < category_selectors.length; i++) {
+        if (category_selectors[i].id === "selector_" + category) {
+          category_selectors[i].classList.remove("border-transparent","text-gray-500","hover:text-gray-700","hover:border-gray-300")
+          category_selectors[i].classList.add("border-emerald-500","text-emerald-600");
+
+        } else {
+          category_selectors[i].classList.add("border-transparent", "text-gray-500", "hover:text-gray-700", "hover:border-gray-300")
+          category_selectors[i].classList.remove("border-emerald-500", "text-emerald-600");
+        }
+
+        if (category_selector_items[i].id === "selector_item_" + category) {
+          category_selector_items[i].classList.remove("hidden");
+        } else {
+          category_selector_items[i].classList.add("hidden");
+        }
+      }
+    }
+    let role_editing = null;
+    function role_edit(_id) {
+      role_editing = $.extend(true, {}, roles[_id]);
+      Object.keys(role_editing.permissions).forEach((permission) => {
+        let objects = document.getElementsByClassName(permission);
+        for(let i = 0; i < objects.length; i++) objects[i].checked = role_editing.permissions[permission];
+      });
+      show_role_edit();
+    }
+
+    function role_edit_toggle_permission(permission) {
+      role_editing.permissions[permission] = !role_editing.permissions[permission];
+      let objects = document.getElementsByClassName(permission);
+      for (let i = 0; i < objects.length; i++) objects[i].checked = role_editing.permissions[permission];
+    }
+
+    document.getElementById("edit_role_save").addEventListener("click", function(event) {
+      event.preventDefault();
+      let data = {
+        _id: role_editing._id,
+        permissions: role_editing.permissions,
+      }
+      $.ajax({
+        type: "PUT",
+        url: "/api/auth/role/permissions/change",
+        contentType: "application/json",
+        data: JSON.stringify(data)
+      }).done(function (data, textStatus, xhr) {
+        document.getElementById("role_edit_fail_banner").classList.add("hidden");
+        document.getElementById("role_edit_success_banner_text").innerHTML = xhr.responseJSON.message;
+        document.getElementById("role_edit_success_banner").classList.remove("hidden");
+        setTimeout(function () {
+          hide_role_edit();
+          location.reload();
+        }, 1500);
+      }).fail(function (data, textStatus, xhr) {
+        document.getElementById("role_edit_success_banner").classList.add("hidden");
+        document.getElementById("role_edit_fail_banner_text").innerHTML = data.responseJSON.message;
+        document.getElementById("role_edit_fail_banner").classList.remove("hidden");
+      })
+    });
+
+    document.getElementById("edit_role_delete").addEventListener("click", function(event) {
+      event.preventDefault();
+      let data = {
+        _id: role_editing._id,
+      }
+      $.ajax({
+        type: "PUT",
+        url: "/api/auth/role/delete",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+      }).done(function (data, textStatus, xhr) {
+        document.getElementById("role_edit_fail_banner").classList.add("hidden");
+        document.getElementById("role_edit_success_banner_text").innerHTML = xhr.responseJSON.message;
+        document.getElementById("role_edit_success_banner").classList.remove("hidden");
+        setTimeout(function () {
+          hide_role_edit();
+          location.reload();
+        }, 1500);
+      }).fail(function (data, textStatus, xhr) {
+        document.getElementById("role_edit_success_banner").classList.add("hidden");
+        document.getElementById("role_edit_fail_banner_text").innerHTML = data.responseJSON.message;
+        document.getElementById("role_edit_fail_banner").classList.remove("hidden");
+      })
+    });
+
+    function show_role_edit() {
+      document.getElementById("role_edit_fail_banner").classList.add("hidden");
+      document.getElementById("role_edit_success_banner").classList.add("hidden");
+
+      document.getElementById("role_edit_backdrop").classList.remove("pointer-events-none");
+      document.getElementById("role_edit_panel").classList.remove("transform","transition","ease-in-out","duration-500","sm:duration-700", "translate-x-full");
+      document.getElementById("role_edit_panel").classList.add("transform","transition","ease-in-out","duration-500","sm:duration-700","translate-x-0");
+    }
+
+    function hide_role_edit() {
+      document.getElementById("role_edit_backdrop").classList.add("pointer-events-none");
+      document.getElementById("role_edit_panel").classList.remove("transform", "transition", "ease-in-out", "duration-500", "sm:duration-700", "translate-x-0");
+      document.getElementById("role_edit_panel").classList.add("transform", "transition", "ease-in-out", "duration-500", "sm:duration-700", "translate-x-full");
+    }
+
+  #role_create_backdrop.relative.z-10.pointer-events-none(class="ease-in opacity-0 duration-200", aria-labelledby='modal-title', role='dialog', aria-modal='true')
+    //
+      Background backdrop, show/hide based on modal state.
+      Entering: "ease-out duration-300"
+      From: "opacity-0"
+      To: "opacity-100"
+      Leaving: "ease-in duration-200"
+      From: "opacity-100"
+      To: "opacity-0"
+    .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
+    .fixed.inset-0.z-10.overflow-y-auto
+      #role_create_panel.flex.min-h-full.items-end.justify-center.p-4.text-center(class='sm:items-center sm:p-0 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95')
+
+        //
+          Modal panel, show/hide based on modal state.
+          Entering: "ease-out duration-300"
+          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          To: "opacity-100 translate-y-0 sm:scale-100"
+          Leaving: "ease-in duration-200"
+          From: "opacity-100 translate-y-0 sm:scale-100"
+          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
+          div
+            .mx-auto.flex.h-12.w-12.items-center.justify-center.rounded-full.bg-yellow-100
+              // Heroicon name: outline/check
+              svg.h-6.w-6.text-green-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='#000000', aria-hidden='true')
+                path(stroke-linecap='round', stroke-linejoin='round', d='M12 4.5v15m7.5-7.5h-15')
+            .mt-3.text-center(class='sm:mt-5')
+              h3#role_create_title.text-lg.font-medium.leading-6.text-gray-900 Add Role
+                form.space-y-6.mt-2(action='#', method='POST')
+                  div
+                    label.block.text-sm.font-medium.text-gray-700.text-left(for='role_create_name') Role Name
+                    .mt-1
+                      input#role_create_name.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='username', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                  div
+                    label.block.text-sm.font-medium.text-gray-700.text-left(for='role_create_template_id') Template ID
+                    .mt-1
+                      input#role_create_template_id.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='template_id', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                  .mt-5
+                    span.text-sm.ml-auto#role_create_error &nbsp;
+                  .mt-5(class='sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3')
+                    button#role_create_submit.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm') Add Role
+                    button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm' onclick="hide_role_create()") Cancel
+  script.
+    function show_role_create() {
+      document.getElementById("role_create_backdrop").classList.remove("opacity-0", "ease-in", "duration-200", "pointer-events-none");
+      document.getElementById("role_create_backdrop").classList.add("ease-out", "duration-300", "opacity-100");
+      document.getElementById("role_create_panel").classList.remove("ease-in", "duration-200", "opacity-0", "translate-y-4","sm:translate-y-0","sm:scale-95");
+      document.getElementById("role_create_panel").classList.add("ease-out","duration-300","opacity-100","translate-y-0","sm:scale-100");
+
+    }
+
+    function hide_role_create() {
+      document.getElementById("role_create_backdrop").classList.remove("ease-out", "duration-300", "opacity-100");
+      document.getElementById("role_create_backdrop").classList.add("opacity-0", "ease-in", "duration-200", "pointer-events-none");
+      document.getElementById("role_create_panel").classList.remove("ease-out", "duration-300", "opacity-100", "translate-y-0", "sm:scale-100");
+      document.getElementById("role_create_panel").classList.add("ease-in", "duration-200", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
+      if (qrefresh) {
+        location.reload();
+      }
+    }
+
+    document.getElementById("role_create_submit").addEventListener("click", function (event) {
+      event.preventDefault();
+      let data = {
+        name: document.getElementById("role_create_name").value,
+        template_id: (document.getElementById("role_create_template_id").value == "" ? null : document.getElementById("role_create_template_id").value)
+      }
+
+      $.ajax({
+        type: "POST",
+        url: "/api/auth/role/create",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+      }).done(function (data, textStatus, xhr) {
+        qrefresh = true;
+        hide_role_create();
+      }).fail(function (data, textStatus, xhr) {
+      }).always(function (data, textStatus, xhr) {
+        status_text(document.getElementById("role_create_error"), (textStatus == "success" ? xhr : data));
+      });
+    })
