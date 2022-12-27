@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 var profileRouter = require('./routes/profile');
 var apiRouter = require('./routes/api');
+var servicesRouter = require("./routes/services")
 var { auth_view, auth_admin} = require('./auth/auth');
 
 var app = express();
@@ -26,9 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', apiRouter);
 app.use('/', auth_view, indexRouter);
-app.use('/profile', profileRouter);
+app.use('/profile', auth_view, profileRouter);
 app.use('/admin', auth_view, adminRouter);
 app.use('/users', auth_view, usersRouter);
+app.use('/services', auth_view, servicesRouter);
 app.get("/logout", (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 })
   res.redirect("/")

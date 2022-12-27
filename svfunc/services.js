@@ -1,36 +1,29 @@
 const { exec } = require("child_process");
+const { services_list, run} = require("../syncmethods/services");
+const Services = require("../syncmethods/services");
+
 
 exports.list = async (req, res, next) => {
-    exec("service --status-all", (error, stdout, stderr) => {
-        if (error) {
-            return res.status(500).json({
-                message: `error: ${error.message}`
-            })
-        }
-        if (stderr) {
-            return res.status(500).json({
-                message: `stderr: ${stderr}`
-            })
-        }
-        let service_data_array = [];
-        stdout.split(" ").forEach((part) => {
-            if (part != "" && part != "[" && part != "]") {
-                if (part.length == 1) service_data_array.push(part);
-                else service_data_array.push(part.slice(0, part.length-1));
-            }
-        })
-        let service_data = {};
-
-        for(let i = 1; i < service_data_array.length; i+=2) {
-            service_data[service_data_array[i]] = service_data_array[i-1] == "+";
-        }
-
-
-        return res.status(200).json({
-            services: service_data
-        })
-
-
-        console.log(`stdout: ${stdout}`);
+    exec("systemctl -r --type service --all", (error, stdout, stderr) => {
+        const output = Services.mapper(error, stdout, stderr, Services.services_list_2)
+        return res.status(output.status).json({ data: output.data })
     });
+    //exec("service --status-all", (error, stdout, stderr) => {
+    //    const output = Services.mapper(error, stdout, stderr, Services.services_list)
+    //    return res.status(output.status).json({ data: output.data })
+    //});
+
+}
+
+exports.details = async (req, res, next) => {
+    let service = req.query.service;
+    if (!service) {
+        return res.status(400).json({
+            message: "No service specified"
+        })
+    }
+    exec(`sudo systemctl -r status ${service}`, (error, stdout, stderr) => {
+        const output = Services.mapper(error, stdout, stderr, Services.services_details);
+        return res.status(output.status).json({ data: output.data })
+    })
 }

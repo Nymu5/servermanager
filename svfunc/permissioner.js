@@ -7,6 +7,7 @@ exports.permissioner = async (req, res, next) => {
     for (let i = split_url.indexOf("api")+1; i < split_url.length; i++) {
         permission_name += split_url[i] + (i === split_url.length-1 ? "" : "_");
     }
+    permission_name = permission_name.split("?")[0];
 
     if (res.locals.permissions["admin"] !== true && (res.locals.permissions[permission_name] !== true)) {
         return res.status(403).json({

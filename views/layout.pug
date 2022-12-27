@@ -4,7 +4,7 @@ html.h-full.bg-gray-100
     title= title
     link(rel='stylesheet', href='/stylesheets/stylesheet.css')
     script(src="/javascripts/jquery-3.6.3.min.js")
-  body.h-full
+  body.h-full.overflow-hidden
     div
       // Off-canvas menu for mobile, show/hide based on off-canvas menu state.
       #m1.relative.z-40.transition-opacity.ease-linear.duration-300.opacity-0(class='md:hidden', role='dialog', aria-modal='true')
@@ -52,6 +52,12 @@ html.h-full.bg-gray-100
                   svg.text-gray-300.mr-4.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                     path(stroke-linecap='round', stroke-linejoin='round', d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25')
                       span.menu-item Dashboard
+                a.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/services', class='hover:bg-gray-700 hover:text-white')
+                  //Heroicon name: outline/home
+                    Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
+                  svg.text-gray-300.mr-4.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                    path(stroke-linecap='round', stroke-linejoin='round', d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z')
+                      span.menu-item Services
                 if (userpermissions.admin)
                   a.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/admin', class='hover:bg-gray-700 hover:text-white')
                     // Heroicon name: outline/chart-bar
@@ -88,6 +94,12 @@ html.h-full.bg-gray-100
                 svg.text-gray-300.mr-3.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                   path(stroke-linecap='round', stroke-linejoin='round', d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25')
                     span.menu-item Dashboard
+              a.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/services', class='hover:bg-gray-700 hover:text-white')
+                //Heroicon name: outline/home
+                  Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
+                svg.text-gray-300.mr-3.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                  path(stroke-linecap='round', stroke-linejoin='round', d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z')
+                    span.menu-item Services
               if (userpermissions.admin)
                 a.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/admin', class='hover:bg-gray-700 hover:text-white')
                   // Heroicon name: outline/chart-bar

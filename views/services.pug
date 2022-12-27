@@ -1,0 +1,131 @@
+extends layout
+
+block content
+  .relative
+    .absolute.inset-0.flex.items-center(aria-hidden='true')
+      .w-full.border-t.border-gray-300
+    .relative.flex.justify-center
+      .relative.mt-1.w-64
+        button#status_selector_button.relative.w-full.cursor-default.rounded-md.border.border-gray-300.bg-white.py-2.pl-3.pr-10.text-left.shadow-sm(type='button', class='focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm', aria-haspopup='listbox', aria-expanded='true', aria-labelledby='listbox-label' onclick="toggle_status_selector_dropdown()")
+          span.flex.items-center
+            span#status_selector_button_indicator.inline-block.h-2.w-2.flex-shrink-0.rounded-full.bg-transparent
+            span#status_selector_button_text.ml-3.block.truncate Services...
+          span.pointer-events-none.absolute.inset-y-0.right-0.flex.items-center.pr-2
+            // Heroicon name: mini/chevron-up-down
+            svg.h-5.w-5.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+              path(fill-rule='evenodd', d='M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z', clip-rule='evenodd')
+        //
+          Select popover, show/hide based on select state.
+          Entering: "transition ease-out"
+          From: "opacity-0"
+          To: "opacity-100"
+          Leaving: "transition ease-in"
+          From: "opacity-100"
+          To: "opacity-0"
+        ul#status_selector_dropdown.transition.duration-100.pointer-events-none.opacity-0.absolute.z-10.mt-1.max-h-60.w-full.overflow-auto.rounded-md.bg-white.py-1.text-base.shadow-lg.ring-1.ring-black.ring-opacity-5(class='focus:outline-none sm:text-sm', tabindex='-1', role='listbox', aria-labelledby='listbox-label', aria-activedescendant='listbox-option-3')
+          each service in Object.keys(data)
+            li.text-gray-900.relative.cursor-default.select-none.py-2.pl-3.pr-9(class="hover:text-white hover:bg-emerald-600" id="service_selector_"+service, role='option', onclick="location.replace('/services?service=" + service + "')")
+              .flex.items-center
+                // Online: "bg-green-400", Not Online: "bg-gray-200"
+                if data[service]
+                  span.inline-block.h-2.w-2.flex-shrink-0.rounded-full.bg-green-400(aria-hidden='true')
+                else
+                  span.inline-block.h-2.w-2.flex-shrink-0.rounded-full.bg-red-400(aria-hidden='true')
+                // Selected: "font-semibold", Not Selected: "font-normal"
+                span.font-normal.ml-3.block.truncate=service
+                  span.sr-only  is online
+
+  if (data2 != null)
+    #status_details_panel.overflow-hidden.bg-white.shadow.mt-5(class='sm:rounded-lg')
+      .px-4.py-5(class='sm:px-6')
+        h3.text-lg.font-medium.leading-6.text-gray-900 Service Information
+        p#status_details_panel_svname.mt-1.max-w-2xl.text-sm.text-gray-500=data2.service
+      .border-t.border-gray-200.px-4.py-5(class='sm:p-0')
+        dl(class='sm:divide-y sm:divide-gray-200')
+          if Object.keys(data2.data).length < 1
+            .rounded-md.bg-red-50.p-4
+              .flex
+                .flex-shrink-0
+                  // Heroicon name: mini/x-circle
+                  svg.h-5.w-5.text-red-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                    path(fill-rule='evenodd', d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z', clip-rule='evenodd')
+                .ml-3
+                  h3.text-sm.font-medium.text-red-800 Service not found
+                  .mt-2.text-sm.text-red-700
+                    ul.list-disc.space-y-1.pl-5(role='list')
+                      li Check spelling of service name and request
+                      li Check if service is existing
+          else
+            for label in Object.keys(data2.data)
+              .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6')
+                dt.text-sm.font-medium.text-gray-500=label
+                dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')=data2.data[label]
+          //
+            .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6')
+              dt.text-sm.font-medium.text-gray-500 Application for
+              dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0') Backend Developer
+            .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6')
+              dt.text-sm.font-medium.text-gray-500 Email address
+              dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0') margotfoster@example.com
+            .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6')
+              dt.text-sm.font-medium.text-gray-500 Salary expectation
+              dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0') $120,000
+            .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6')
+              dt.text-sm.font-medium.text-gray-500 About
+              dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
+                | Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing reprehenderit deserunt qui eu.
+            .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6')
+              dt.text-sm.font-medium.text-gray-500 Attachments
+              dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
+                ul.divide-y.divide-gray-200.rounded-md.border.border-gray-200(role='list')
+                  li.flex.items-center.justify-between.py-3.pl-3.pr-4.text-sm
+                    .flex.w-0.flex-1.items-center
+                      // Heroicon name: mini/paper-clip
+                      svg.h-5.w-5.flex-shrink-0.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                        path(fill-rule='evenodd', d='M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z', clip-rule='evenodd')
+                      span.ml-2.w-0.flex-1.truncate resume_back_end_developer.pdf
+                    .ml-4.flex-shrink-0
+                      a.font-medium.text-indigo-600(href='#', class='hover:text-indigo-500') Download
+                  li.flex.items-center.justify-between.py-3.pl-3.pr-4.text-sm
+                    .flex.w-0.flex-1.items-center
+                      // Heroicon name: mini/paper-clip
+                      svg.h-5.w-5.flex-shrink-0.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                        path(fill-rule='evenodd', d='M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z', clip-rule='evenodd')
+                      span.ml-2.w-0.flex-1.truncate coverletter_back_end_developer.pdf
+                    .ml-4.flex-shrink-0
+                      a.font-medium.text-indigo-600(href='#', class='hover:text-indigo-500') Download
+
+  script.
+    let state_status_selector_dropdown = false;
+    function show_status_selector_dropdown() {
+      document.getElementById("status_selector_dropdown").classList.remove("transition","ease-in","opacity-0", "pointer-events-none");
+      document.getElementById("status_selector_dropdown").classList.add("transition","ease-out", "opacity-100");
+      state_status_selector_dropdown = true;
+    }
+    function hide_status_selector_dropdown() {
+      document.getElementById("status_selector_dropdown").classList.remove("transition", "ease-out", "opacity-100");
+      document.getElementById("status_selector_dropdown").classList.add("transition", "ease-in", "opacity-0", "pointer-events-none");
+      state_status_selector_dropdown = false;
+    }
+    function toggle_status_selector_dropdown() {
+        if (state_status_selector_dropdown) {
+            hide_status_selector_dropdown();
+        } else {
+            show_status_selector_dropdown();
+        }
+    }
+
+    function show_status_details_panel() {
+
+    }
+
+    function hide_status_details_panel() {
+
+    }
+
+    let status_current = null;
+    function status_selected (status) {
+        status_current = status;
+    }
+
+
