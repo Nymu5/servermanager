@@ -1,686 +1,699 @@
 extends layout
 
 block content
-  main.flex-1
-    .mt-8
-      .inline-block.min-w-full.border-b.border-gray-200.align-middle
-        table.min-w-full
-          thead
-            tr.border-t.border-gray-200
-              th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col')
-                span(class='lg:pl-2').align-middle User
-              th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col') Role
-              th.border-b.border-gray-200.bg-gray-50.py-3.pr-6.text-right.text-sm.font-semibold.text-gray-900(scope='col')
-          tbody.divide-y.divide-gray-100.bg-white
-            each user in users
-              tr
-                td.w-full.max-w-0.whitespace-nowrap.px-6.py-3.text-sm.font-medium.text-gray-900
-                  .flex.items-center.space-x-3(class='lg:pl-2')
-                    if (roles[user.role_id].permissions.admin)
-                      .flex-shrink-0.rounded-full.bg-red-800(class='w-2.5 h-2.5', aria-hidden='true')
-                    else
-                      .flex-shrink-0.rounded-full.bg-transparent(class='w-2.5 h-2.5', aria-hidden='true')
-                    a.truncate(href='#', class='hover:text-gray-600')
-                      span=user.username
-                td.px-6.py-3.text-sm.font-medium.text-gray-500
-                  .flex.items-center.space-x-2
-                    .flex.flex-shrink-0.-space-x-1
+  if (userpermissions.admin)
+    main.flex-1
+      .mt-8
+        .inline-block.min-w-full.border-b.border-gray-200.align-middle
+          table.min-w-full
+            thead
+              tr.border-t.border-gray-200
+                th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col')
+                  span(class='lg:pl-2').align-middle User
+                th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col') Role
+                th.border-b.border-gray-200.bg-gray-50.py-3.pr-6.text-right.text-sm.font-semibold.text-gray-900(scope='col')
+            tbody.divide-y.divide-gray-100.bg-white
+              each user in users
+                tr
+                  td.w-full.max-w-0.whitespace-nowrap.px-6.py-3.text-sm.font-medium.text-gray-900
+                    .flex.items-center.space-x-3(class='lg:pl-2')
                       if (roles[user.role_id].permissions.admin)
-                        span.flex-shrink-0.text-xs.font-medium.leading-5.text-red-800=user.role_name
+                        .flex-shrink-0.rounded-full.bg-red-800(class='w-2.5 h-2.5', aria-hidden='true')
                       else
-                        span.flex-shrink-0.text-xs.font-medium.leading-5=user.role_name
-                td.whitespace-nowrap.px-6.py-3.text-right.text-sm.font-medium
-                  a.text-emerald-600(href='#', class='hover:text-emerald-900', onClick="user_edit('" + user._id + "')") Edit
-              // More projects...
+                        .flex-shrink-0.rounded-full.bg-transparent(class='w-2.5 h-2.5', aria-hidden='true')
+                      a.truncate(href='#', class='hover:text-gray-600')
+                        span=user.username
+                  td.px-6.py-3.text-sm.font-medium.text-gray-500
+                    .flex.items-center.space-x-2
+                      .flex.flex-shrink-0.-space-x-1
+                        if (roles[user.role_id].permissions.admin)
+                          span.flex-shrink-0.text-xs.font-medium.leading-5.text-red-800=user.role_name
+                        else
+                          span.flex-shrink-0.text-xs.font-medium.leading-5=user.role_name
+                  td.whitespace-nowrap.px-6.py-3.text-right.text-sm.font-medium
+                    a.text-emerald-600(href='#', class='hover:text-emerald-900', onClick="user_edit('" + user._id + "')") Edit
+                // More projects...
 
 
-  #edit-background.relative.z-10.invisible(aria-labelledby='slide-over-title', role='dialog', aria-modal='true')
-    // Background backdrop, show/hide based on slide-over state.
-    .fixed.inset-0
-    .fixed.inset-0.overflow-hidden
-      .absolute.inset-0.overflow-hidden
-        #edit-panel.pointer-events-none.fixed.inset-y-0.right-0.flex.max-w-full.pl-10(class='sm:pl-16 transform transition ease-in-out duration-500 sm:duration-700 translate-x-full')
+    #edit-background.relative.z-10.invisible(aria-labelledby='slide-over-title', role='dialog', aria-modal='true')
+      // Background backdrop, show/hide based on slide-over state.
+      .fixed.inset-0
+      .fixed.inset-0.overflow-hidden
+        .absolute.inset-0.overflow-hidden
+          #edit-panel.pointer-events-none.fixed.inset-y-0.right-0.flex.max-w-full.pl-10(class='sm:pl-16 transform transition ease-in-out duration-500 sm:duration-700 translate-x-full')
+            //
+              Slide-over panel, show/hide based on slide-over state.
+              Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+              From: "translate-x-full"
+              To: "translate-x-0"
+              Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+              From: "translate-x-0"
+              To: "translate-x-full"
+            .pointer-events-auto.w-screen.max-w-md
+              form.flex.h-full.flex-col.divide-y.divide-gray-200.bg-white.shadow-xl
+                .h-0.flex-1.overflow-y-auto
+                  .bg-gray-800.py-6.px-4(class='sm:px-6')
+                    .flex.items-center.justify-between
+                      h2#slide-over-title.text-lg.font-medium.text-white User
+                      .ml-3.flex.h-7.items-center
+                        button.rounded-md.bg-gray-800.text-emerald-200(type='button', class='hover:text-white focus:outline-none focus:ring-2 focus:ring-white', onclick="edit_menu_hide()")
+                          span.sr-only Close panel
+                          // Heroicon name: outline/x-mark
+                          svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                            path(stroke-linecap='round', stroke-linejoin='round', d='M6 18L18 6M6 6l12 12')
+                    .mt-1
+                      p.text-sm.text-emerald-300 Create / Edit User
+                  .flex.flex-1.flex-col.justify-between
+                    .divide-y.divide-gray-200.px-4(class='sm:px-6')
+                      .space-y-6.pt-6.pb-5
+                        div
+                          label.block.text-sm.font-medium.text-gray-900(for='username') Username
+                          .mt-1
+                            input#username.block.w-full.rounded-md.border-gray-300.shadow-sm(type='text', name='project-name', class='focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm')
+                          .mt-1
+                            span#username-error-text.text-red-600.text-sm &nbsp;
+                        div
+                          label#listbox-label.block.text-sm.font-medium.text-gray-700 Role
+                            .relative.mt-1
+                              button.relative.w-full.cursor-pointer.rounded-md.border.border-gray-300.bg-white.py-2.pl-3.pr-10.text-left.shadow-sm(disabled=false, type='button', class='focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm', aria-haspopup='listbox', aria-expanded='true', aria-labelledby='listbox-label', onclick="listbox_dropdown_toggle()")
+                                span#listbox-option-selected.block.truncate
+                                span.pointer-events-none.absolute.inset-y-0.right-0.flex.items-center.pr-2
+                                  // Heroicon name: mini/chevron-up-down
+                                  svg.h-5.w-5.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                                    path(fill-rule='evenodd', d='M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z', clip-rule='evenodd')
+                              //
+                                Select popover, show/hide based on select state.
+                                Entering: ""
+                                From: ""
+                                To: ""
+                                Leaving: "transition ease-in duration-100"
+                                From: "opacity-100"
+                                To: "opacity-0"
+                              ul#listbox-dropdown.hidden.absolute.z-10.mt-1.max-h-60.w-full.overflow-auto.rounded-md.bg-white.py-1.text-base.shadow-lg.ring-1.ring-black.ring-opacity-5(class='focus:outline-none sm:text-sm', tabindex='-1', role='listbox', aria-labelledby='listbox-label')
+                                //
+                                  Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
+                                  Highlighted: "text-white bg-emerald-600", Not Highlighted: "text-gray-900"
+                                each role in roles
+                                  li#listbox-option-0.text-gray-900.relative.cursor-default.select-none.py-2.pl-8.pr-4(class="hover:cursor-pointer hover:text-white hover:bg-emerald-600" role='option', onclick="user_edit_role('" + role._id + "')")
+                                    // Selected: "font-semibold", Not Selected: "font-normal"
+                                    span.font-normal.block.truncate=role.name
+                                    //
+                                      Checkmark, only display for selected option.
+                                      Highlighted: "text-white", Not Highlighted: "text-emerald-600"
+                                    span.text-emerald-600.absolute.inset-y-0.left-0.flex.items-center.hidden(class='pl-1.5' id="role_"+role._id)
+                                      // Heroicon name: mini/check
+                                      svg.h-5.w-5(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                                        path(fill-rule='evenodd', d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z', clip-rule='evenodd')
+                                  // More items...
+                          .mt-1
+                            span#role-error-text.text-sm.text-red-600 &nbsp;
+
+                .flex.flex-shrink-0.justify-end.px-4.py-4
+                  button.ml-2.mr-auto.rounded-md.border.border-red-800.bg-white.py-2.px-4.text-sm.font-medium.text-red-800.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onclick="show_delete_confirmation()") Delete
+                  button.rounded-md.border.border-gray-300.bg-white.py-2.px-4.text-sm.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onclick="edit_menu_hide()") Close
+                  button#edit-user-submit.ml-4.inline-flex.justify-center.rounded-md.border.border-transparent.bg-emerald-600.py-2.px-4.text-sm.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Save
+
+    #delete-confirmation-backdrop.pointer-events-none.relative.z-20.duration-300(class="ease-in opacity-0", aria-labelledby='modal-title', role='dialog', aria-modal='true')
+      //
+        Background backdrop, show/hide based on modal state.
+        Entering: "ease-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+        Leaving: "ease-in duration-200"
+        From: "opacity-100"
+        To: "opacity-0"
+      .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
+      .fixed.inset-0.z-10.overflow-y-auto
+        #delete-confirmation-panel.flex.min-h-full.items-end.justify-center.p-4.text-center.duration-300(class='sm:items-center sm:p-0')
           //
-            Slide-over panel, show/hide based on slide-over state.
-            Entering: "transform transition ease-in-out duration-500 sm:duration-700"
-            From: "translate-x-full"
-            To: "translate-x-0"
-            Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
-            From: "translate-x-0"
-            To: "translate-x-full"
-          .pointer-events-auto.w-screen.max-w-md
-            form.flex.h-full.flex-col.divide-y.divide-gray-200.bg-white.shadow-xl
-              .h-0.flex-1.overflow-y-auto
-                .bg-gray-800.py-6.px-4(class='sm:px-6')
-                  .flex.items-center.justify-between
-                    h2#slide-over-title.text-lg.font-medium.text-white User
+            Modal panel, show/hide based on modal state.
+            Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+            Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
+            div(class='sm:flex sm:items-start')
+              .mx-auto.flex.h-12.w-12.flex-shrink-0.items-center.justify-center.rounded-full.bg-red-100(class='sm:mx-0 sm:h-10 sm:w-10')
+                // Heroicon name: outline/exclamation-triangle
+                svg.h-6.w-6.text-red-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                  path(stroke-linecap='round', stroke-linejoin='round', d='M12 10.5v3.75m-9.303 3.376C1.83 19.126 2.914 21 4.645 21h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 4.88c-.866-1.501-3.032-1.501-3.898 0L2.697 17.626zM12 17.25h.007v.008H12v-.008z')
+              .mt-3.text-center(class='sm:mt-0 sm:ml-4 sm:text-left')
+                h3#modal-title.text-lg.font-medium.leading-6.text-gray-900 Delete User
+                .mt-2
+                  p.text-sm.text-gray-500
+                    | Are you sure you want to delete this user account? All of your data will be permanently removed from our servers. This action cannot be undone.
+            .mt-5(class='sm:mt-4 sm:flex sm:flex-row-reverse')
+              button#edit-user-delete.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-red-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='button', class='hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm') Delete
+              button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm', onclick="hide_delete_confirmation()") Cancel
+
+    script.
+      let backdrop = document.getElementById("delete-confirmation-backdrop");
+      let panel = document.getElementById("delete-confirmation-panel");
+
+      function show_delete_confirmation() {
+        backdrop.classList.remove("pointer-events-none");
+        backdrop.classList.remove("ease-in", "opacity-0");
+        backdrop.classList.add("ease-out", "opacity-100");
+
+        panel.classList.remove("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale:95");
+        panel.classList.add("ease-out", "opacity-100", "translate-y-0", "sm:scale:100")
+      }
+
+      function hide_delete_confirmation() {
+        backdrop.classList.remove("ease-out", "opacity-100");
+        backdrop.classList.add("ease-in", "opacity-0");
+
+        panel.classList.remove("ease-out", "opacity-100", "translate-y-0", "sm:scale:100")
+        panel.classList.add("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale:95");
+        backdrop.classList.add("pointer-events-none");
+      }
+
+      document.getElementById("edit-user-delete").addEventListener("click", function() {
+        $.ajax({
+          type: 'PUT',
+          url: '/api/auth/user/delete',
+          contentType: 'application/json',
+          data: JSON.stringify({
+            id: user._id,
+          }), // access in body
+        }).done(function (data, textStatus, xhr) {
+          qrefresh = true;
+          hide_delete_confirmation();
+          edit_menu_hide();
+        }).fail(function (data, textStatus, xhr) {
+        }).always(function (data, textStatus, xhr) {
+          //status_text(document.getElementById("role-error-text"), (textStatus == "success" ? xhr : data));
+        });
+      });
+    .relative.mt-4
+      .absolute.inset-0.flex.items-center(aria-hidden='true')
+        .w-full.border-t.border-gray-300
+      .relative.flex.justify-center
+        button.inline-flex.items-center.rounded-full.border.border-gray-300.bg-white.px-4.text-sm.font-medium.leading-5.text-gray-700.shadow-sm(type='button', class='py-1.5 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_user_create()")
+          // Heroicon name: mini/plus
+          svg.mr-1.h-5.w-5.text-gray-400(class='-ml-1.5', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+            path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
+          span Add User
+
+
+    script.
+      let users = !{JSON.stringify(users)}
+      let roles = !{JSON.stringify(roles)}
+      let user = null;
+      let role = null;
+      let qrefresh = false;
+      function user_edit(_id) {
+        user = users[_id];
+        role = roles[user.role_id]
+        user_edit_role(role._id)
+        document.getElementById("slide-over-title").innerHTML = user.username;
+        document.getElementById("username").value = user.username;
+        document.getElementById("listbox-option-selected").innerHTML = role.name;
+
+        edit_menu_show();
+      }
+
+      function user_edit_role(_id) {
+        role = roles[_id];
+        Object.keys(roles).forEach(function (key) {
+          document.getElementById("role_" + key).classList.add("hidden");
+        })
+        document.getElementById("role_"+_id).classList.remove("hidden");
+        document.getElementById("listbox-option-selected").innerHTML = role.name;
+      }
+
+      function listbox_dropdown_toggle() {
+        document.getElementById("listbox-dropdown").classList.toggle("hidden");
+      }
+
+      let edit_menu_state = false;
+      function edit_menu_show() {
+        document.getElementById("edit-background").classList.remove("invisible");
+        document.getElementById("edit-panel").classList.remove("translate-x-full");
+        document.getElementById("edit-panel").classList.add("translate-x-0");
+        edit_menu_state = true;
+      }
+      function edit_menu_hide() {
+        document.getElementById("edit-panel").classList.add("translate-x-full");
+        document.getElementById("edit-panel").classList.remove("translate-x-0");
+        setTimeout(function() {
+          document.getElementById("edit-background").classList.add("invisible");
+        }, 500);
+        status_text(document.getElementById("role-error-text"));
+        status_text(document.getElementById("username-error-text"));
+        edit_menu_state = false;
+        if (qrefresh) location.reload();
+      }
+      function edit_menu_toggle() {
+        if (edit_menu_state) edit_menu_hide();
+        else edit_menu_show();
+        edit_menu_state = !edit_menu_state;
+      }
+
+      document.getElementById("edit-user-submit").addEventListener("click", function (event) {
+        event.preventDefault();
+
+        if (role._id != user.role_id) {
+          $.ajax({
+            type: 'PUT',
+            url: '/api/auth/role/update',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              id: user._id,
+              role: role._id,
+            }), // access in body
+          }).done(function (data, textStatus, xhr) {
+            qrefresh = true;
+          }).fail(function (data, textStatus, xhr) {
+          }).always(function (data, textStatus, xhr) {
+            status_text(document.getElementById("role-error-text"), (textStatus == "success" ? xhr : data));
+          });
+        }
+
+        if (document.getElementById("username").value != user.username) {
+          $.ajax({
+            type: 'PUT',
+            url: '/api/auth/user/change',
+            contentType: 'application/json',
+            data: JSON.stringify({
+              id: user._id,
+              username: document.getElementById("username").value,
+            }),
+          }).done(function (data, textStatus, xhr) {
+            qrefresh = true;
+          }).fail(function (data, textStatus, xhr) {
+          }).always(function (data, textStatus, xhr) {
+            status_text(document.getElementById("username-error-text"), (textStatus == "success" ? xhr : data));
+          });
+        }
+
+
+
+
+        //edit_menu_hide();
+      })
+    #user_create_backdrop.relative.z-10.duration-300.pointer-events-none(class="ease-in opacity-0", aria-labelledby='modal-title', role='dialog', aria-modal='true')
+      //
+        Background backdrop, show/hide based on modal state.
+        Entering: "ease-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+        Leaving: "ease-in duration-200"
+        From: "opacity-100"
+        To: "opacity-0"
+      .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
+      .fixed.inset-0.z-10.overflow-y-auto
+        #user_create_panel.flex.min-h-full.items-end.justify-center.p-4.text-center.duration-300(class='sm:items-center sm:p-0 ease-in opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95')
+
+          //
+            Modal panel, show/hide based on modal state.
+            Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+            Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
+            div
+              .mx-auto.flex.h-12.w-12.items-center.justify-center.rounded-full.bg-yellow-100
+                // Heroicon name: outline/check
+                svg.h-6.w-6.text-green-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='#000000', aria-hidden='true')
+                  path(stroke-linecap='round', stroke-linejoin='round', d='M12 4.5v15m7.5-7.5h-15')
+              .mt-3.text-center(class='sm:mt-5')
+                h3#user_create_title.text-lg.font-medium.leading-6.text-gray-900 Add User
+                  form.space-y-6.mt-2(action='#', method='POST')
+                    div
+                      label.block.text-sm.font-medium.text-gray-700.text-left(for='user_create_username') Username
+                      .mt-1
+                        input#user_create_username.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='username', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                    div
+                      label.block.text-sm.font-medium.text-gray-700.text-left(for='user_create_password') Password
+                      .mt-1
+                        input#user_create_password.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(disabled=true, name='password', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                    .mt-5
+                      span.text-sm.ml-auto#user_create_error &nbsp;
+                    .mt-5(class='sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3')
+                      button#user_create_submit.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm') Add User
+                      button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm' onclick="hide_user_create()") Cancel
+
+    script.
+      function show_user_create() {
+        status_text(document.getElementById("user_create_error"));
+        document.getElementById("user_create_backdrop").classList.remove("ease-in", "opacity-0", "pointer-events-none");
+        document.getElementById("user_create_backdrop").classList.add("ease-out", "opacity-100");
+        document.getElementById("user_create_panel").classList.remove("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
+        document.getElementById("user_create_panel").classList.add("ease-out", "opacity-100", "translate-y-0", "sm:scale-100");
+        document.getElementById("user_create_password").value = random_password();
+      }
+
+      function hide_user_create() {
+        document.getElementById("user_create_backdrop").classList.remove("ease-out", "opacity-100");
+        document.getElementById("user_create_backdrop").classList.add("ease-in", "opacity-0", "pointer-events-none");
+        document.getElementById("user_create_panel").classList.remove("ease-out", "opacity-100", "translate-y-0", "sm:scale-100");
+        document.getElementById("user_create_panel").classList.add("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
+        if (qrefresh) location.reload();
+      }
+
+      function random_password() {
+        let length = 12,
+                charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+                retVal = "";
+        for (let i = 0, n = charset.length; i < length; ++i) {
+          retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+      }
+
+      document.getElementById("user_create_submit").addEventListener("click", function(event) {
+        event.preventDefault();
+        let data = {
+          username: document.getElementById("user_create_username").value,
+          password: document.getElementById("user_create_password").value,
+        }
+
+        $.ajax({
+          type: 'POST',
+          url: '/api/auth/user/register',
+          contentType: 'application/json',
+          data: JSON.stringify(data),
+        }).done(function (data, textStatus, xhr) {
+          qrefresh = true;
+          hide_user_create();
+        }).fail(function (data, textStatus, xhr) {
+        }).always(function (data, textStatus, xhr) {
+          status_text(document.getElementById("user_create_error"), (textStatus == "success" ? xhr : data));
+        });
+      });
+
+    main.flex-1
+      .mt-8
+        .inline-block.min-w-full.border-b.border-gray-200.align-middle
+          table.min-w-full
+            thead
+              tr.border-t.border-gray-200
+                th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col')
+                  span(class='lg:pl-2').align-middle Role
+                th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col') ID
+                th.border-b.border-gray-200.bg-gray-50.py-3.pr-6.text-right.text-sm.font-semibold.text-gray-900(scope='col')
+            tbody.divide-y.divide-gray-100.bg-white
+              each role in roles
+                tr
+                  td.w-full.max-w-0.whitespace-nowrap.px-6.py-3.text-sm.font-medium.text-gray-900
+                    .flex.items-center.space-x-3(class='lg:pl-2')
+                      if (role.permissions.admin)
+                        .flex-shrink-0.rounded-full.bg-red-800(class='w-2.5 h-2.5', aria-hidden='true')
+                      else
+                        .flex-shrink-0.rounded-full.bg-transparent(class='w-2.5 h-2.5', aria-hidden='true')
+                      a.truncate(href='#', class='hover:text-gray-600')
+                        span=role.name
+                  td.px-6.py-3.text-sm.font-medium.text-gray-500
+                    .flex.items-center.space-x-2
+                      .flex.flex-shrink-0.-space-x-1
+                        if (role.permissions.admin)
+                          span.flex-shrink-0.text-xs.font-medium.leading-5.text-red-800=role._id
+                        else
+                          span.flex-shrink-0.text-xs.font-medium.leading-5=role._id
+                  td.whitespace-nowrap.px-6.py-3.text-right.text-sm.font-medium
+                    a.text-emerald-600(href='#', class='hover:text-emerald-900', onClick="role_edit('" + role._id + "')") Edit
+                // More projects...
+    .relative.mt-4
+      .absolute.inset-0.flex.items-center(aria-hidden='true')
+        .w-full.border-t.border-gray-300
+      .relative.flex.justify-center
+        button.inline-flex.items-center.rounded-full.border.border-gray-300.bg-white.px-4.text-sm.font-medium.leading-5.text-gray-700.shadow-sm(type='button', class='py-1.5 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_role_create()")
+          // Heroicon name: mini/plus
+          svg.mr-1.h-5.w-5.text-gray-400(class='-ml-1.5', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+            path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
+          span Add Role
+    #role_edit_backdrop.pointer-events-none.relative.z-10(aria-labelledby='slide-over-title', role='dialog', aria-modal='true')
+      // Background backdrop, show/hide based on slide-over state.
+      .fixed.inset-0
+      .fixed.inset-0.overflow-hidden
+        .absolute.inset-0.overflow-hidden
+          #role_edit_panel.pointer-events-none.fixed.inset-y-0.right-0.flex.max-w-full.pl-10(class='sm:pl-16 transform transition ease-in-out duration-500 sm:duration-700 translate-x-full')
+            //
+              Slide-over panel, show/hide based on slide-over state.
+              Entering: "transform transition ease-in-out duration-500 sm:duration-700"
+              From: "translate-x-full"
+              To: "translate-x-0"
+              Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
+              From: "translate-x-0"
+              To: "translate-x-full"
+            .pointer-events-auto.w-screen.max-w-md
+              .flex.h-full.flex-col.overflow-y-scroll.bg-white.shadow-xl
+                .p-6
+                  .flex.items-start.justify-between
+                    h2.text-lg.font-medium.text-gray-900 Permissions
                     .ml-3.flex.h-7.items-center
-                      button.rounded-md.bg-gray-800.text-emerald-200(type='button', class='hover:text-white focus:outline-none focus:ring-2 focus:ring-white', onclick="edit_menu_hide()")
+                      span.isolate.inline-flex.rounded-md.shadow-sm.mr-4
+                        button#edit_role_delete.relative.inline-flex.items-center.rounded-l-md.border.border-red-300.bg-white.px-4.py-2.text-sm.font-medium.text-red-700(type='button', class='hover:bg-red-50 focus:z-10 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500') Delete
+                        button#edit_role_save.relative.-ml-px.inline-flex.items-center.rounded-r-md.border.border-green-300.bg-white.px-4.py-2.text-sm.font-medium.text-green-700(type='button', class='hover:bg-green-50 focus:z-10 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500') Save
+                      //button#edit_role_save.inline-flex.items-center.rounded-full.border.border-transparent.bg-green-600.px-4.py-2.text-sm.font-medium.text-white.shadow-sm.mr-4(type='button', class='hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2') Save
+                      button.rounded-md.bg-white.text-gray-400(type='button', class='hover:text-gray-500 focus:ring-2 focus:ring-emerald-500', onclick="hide_role_edit()")
                         span.sr-only Close panel
                         // Heroicon name: outline/x-mark
                         svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                           path(stroke-linecap='round', stroke-linejoin='round', d='M6 18L18 6M6 6l12 12')
-                  .mt-1
-                    p.text-sm.text-emerald-300 Create / Edit User
-                .flex.flex-1.flex-col.justify-between
-                  .divide-y.divide-gray-200.px-4(class='sm:px-6')
-                    .space-y-6.pt-6.pb-5
-                      div
-                        label.block.text-sm.font-medium.text-gray-900(for='username') Username
-                        .mt-1
-                          input#username.block.w-full.rounded-md.border-gray-300.shadow-sm(type='text', name='project-name', class='focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm')
-                        .mt-1
-                          span#username-error-text.text-red-600.text-sm &nbsp;
-                      div
-                        label#listbox-label.block.text-sm.font-medium.text-gray-700 Role
-                          .relative.mt-1
-                            button.relative.w-full.cursor-pointer.rounded-md.border.border-gray-300.bg-white.py-2.pl-3.pr-10.text-left.shadow-sm(disabled=false, type='button', class='focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 sm:text-sm', aria-haspopup='listbox', aria-expanded='true', aria-labelledby='listbox-label', onclick="listbox_dropdown_toggle()")
-                              span#listbox-option-selected.block.truncate
-                              span.pointer-events-none.absolute.inset-y-0.right-0.flex.items-center.pr-2
-                                // Heroicon name: mini/chevron-up-down
-                                svg.h-5.w-5.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
-                                  path(fill-rule='evenodd', d='M10 3a.75.75 0 01.55.24l3.25 3.5a.75.75 0 11-1.1 1.02L10 4.852 7.3 7.76a.75.75 0 01-1.1-1.02l3.25-3.5A.75.75 0 0110 3zm-3.76 9.2a.75.75 0 011.06.04l2.7 2.908 2.7-2.908a.75.75 0 111.1 1.02l-3.25 3.5a.75.75 0 01-1.1 0l-3.25-3.5a.75.75 0 01.04-1.06z', clip-rule='evenodd')
-                            //
-                              Select popover, show/hide based on select state.
-                              Entering: ""
-                              From: ""
-                              To: ""
-                              Leaving: "transition ease-in duration-100"
-                              From: "opacity-100"
-                              To: "opacity-0"
-                            ul#listbox-dropdown.hidden.absolute.z-10.mt-1.max-h-60.w-full.overflow-auto.rounded-md.bg-white.py-1.text-base.shadow-lg.ring-1.ring-black.ring-opacity-5(class='focus:outline-none sm:text-sm', tabindex='-1', role='listbox', aria-labelledby='listbox-label')
-                              //
-                                Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
-                                Highlighted: "text-white bg-emerald-600", Not Highlighted: "text-gray-900"
-                              each role in roles
-                                li#listbox-option-0.text-gray-900.relative.cursor-default.select-none.py-2.pl-8.pr-4(class="hover:cursor-pointer hover:text-white hover:bg-emerald-600" role='option', onclick="user_edit_role('" + role._id + "')")
-                                  // Selected: "font-semibold", Not Selected: "font-normal"
-                                  span.font-normal.block.truncate=role.name
-                                  //
-                                    Checkmark, only display for selected option.
-                                    Highlighted: "text-white", Not Highlighted: "text-emerald-600"
-                                  span.text-emerald-600.absolute.inset-y-0.left-0.flex.items-center.hidden(class='pl-1.5' id="role_"+role._id)
-                                    // Heroicon name: mini/check
-                                    svg.h-5.w-5(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
-                                      path(fill-rule='evenodd', d='M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z', clip-rule='evenodd')
-                                // More items...
-                        .mt-1
-                          span#role-error-text.text-sm.text-red-600 &nbsp;
+                .border-l-4.border-red-400.bg-red-50.p-4.mb-4#role_edit_fail_banner.hidden
+                  .flex
+                    .flex-shrink-0
+                      // Heroicon name: mini/exclamation-triangle
+                      svg.h-5.w-5.text-red-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                        path(fill-rule='evenodd', d='M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z', clip-rule='evenodd')
+                    .ml-3
+                      p#role_edit_fail_banner_text.text-sm.text-red-700 Error Message
+                .border-l-4.border-green-400.bg-green-50.p-4.mb-4#role_edit_success_banner.hidden
+                  .flex
+                    .flex-shrink-0
+                      // Heroicon name: mini/exclamation-triangle
+                      svg.text-green-400.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                        path(stroke-linecap='round', stroke-linejoin='round', d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
+                    .ml-3
+                      p#role_edit_success_banner_text.text-sm.text-green-700 Success Message
 
-              .flex.flex-shrink-0.justify-end.px-4.py-4
-                button.ml-2.mr-auto.rounded-md.border.border-red-800.bg-white.py-2.px-4.text-sm.font-medium.text-red-800.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onclick="show_delete_confirmation()") Delete
-                button.rounded-md.border.border-gray-300.bg-white.py-2.px-4.text-sm.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onclick="edit_menu_hide()") Close
-                button#edit-user-submit.ml-4.inline-flex.justify-center.rounded-md.border.border-transparent.bg-emerald-600.py-2.px-4.text-sm.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Save
-
-  #delete-confirmation-backdrop.pointer-events-none.relative.z-20.duration-300(class="ease-in opacity-0", aria-labelledby='modal-title', role='dialog', aria-modal='true')
-    //
-      Background backdrop, show/hide based on modal state.
-      Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-      Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-    .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
-    .fixed.inset-0.z-10.overflow-y-auto
-      #delete-confirmation-panel.flex.min-h-full.items-end.justify-center.p-4.text-center.duration-300(class='sm:items-center sm:p-0')
-        //
-          Modal panel, show/hide based on modal state.
-          Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-          Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-        .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
-          div(class='sm:flex sm:items-start')
-            .mx-auto.flex.h-12.w-12.flex-shrink-0.items-center.justify-center.rounded-full.bg-red-100(class='sm:mx-0 sm:h-10 sm:w-10')
-              // Heroicon name: outline/exclamation-triangle
-              svg.h-6.w-6.text-red-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
-                path(stroke-linecap='round', stroke-linejoin='round', d='M12 10.5v3.75m-9.303 3.376C1.83 19.126 2.914 21 4.645 21h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 4.88c-.866-1.501-3.032-1.501-3.898 0L2.697 17.626zM12 17.25h.007v.008H12v-.008z')
-            .mt-3.text-center(class='sm:mt-0 sm:ml-4 sm:text-left')
-              h3#modal-title.text-lg.font-medium.leading-6.text-gray-900 Delete User
-              .mt-2
-                p.text-sm.text-gray-500
-                  | Are you sure you want to delete this user account? All of your data will be permanently removed from our servers. This action cannot be undone.
-          .mt-5(class='sm:mt-4 sm:flex sm:flex-row-reverse')
-            button#edit-user-delete.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-red-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='button', class='hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm') Delete
-            button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm', onclick="hide_delete_confirmation()") Cancel
-
-  script.
-    let backdrop = document.getElementById("delete-confirmation-backdrop");
-    let panel = document.getElementById("delete-confirmation-panel");
-
-    function show_delete_confirmation() {
-      backdrop.classList.remove("pointer-events-none");
-      backdrop.classList.remove("ease-in", "opacity-0");
-      backdrop.classList.add("ease-out", "opacity-100");
-
-      panel.classList.remove("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale:95");
-      panel.classList.add("ease-out", "opacity-100", "translate-y-0", "sm:scale:100")
-    }
-
-    function hide_delete_confirmation() {
-      backdrop.classList.remove("ease-out", "opacity-100");
-      backdrop.classList.add("ease-in", "opacity-0");
-
-      panel.classList.remove("ease-out", "opacity-100", "translate-y-0", "sm:scale:100")
-      panel.classList.add("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale:95");
-      backdrop.classList.add("pointer-events-none");
-    }
-
-    document.getElementById("edit-user-delete").addEventListener("click", function() {
-      $.ajax({
-        type: 'PUT',
-        url: '/api/auth/user/delete',
-        contentType: 'application/json',
-        data: JSON.stringify({
-          id: user._id,
-        }), // access in body
-      }).done(function (data, textStatus, xhr) {
-        qrefresh = true;
-        hide_delete_confirmation();
-        edit_menu_hide();
-      }).fail(function (data, textStatus, xhr) {
-      }).always(function (data, textStatus, xhr) {
-        //status_text(document.getElementById("role-error-text"), (textStatus == "success" ? xhr : data));
-      });
-    });
-  .relative.mt-4
-    .absolute.inset-0.flex.items-center(aria-hidden='true')
-      .w-full.border-t.border-gray-300
-    .relative.flex.justify-center
-      button.inline-flex.items-center.rounded-full.border.border-gray-300.bg-white.px-4.text-sm.font-medium.leading-5.text-gray-700.shadow-sm(type='button', class='py-1.5 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_user_create()")
-        // Heroicon name: mini/plus
-        svg.mr-1.h-5.w-5.text-gray-400(class='-ml-1.5', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
-          path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
-        span Add User
-
-
-  script.
-    let users = !{JSON.stringify(users)}
-    let roles = !{JSON.stringify(roles)}
-    let user = null;
-    let role = null;
-    let qrefresh = false;
-    function user_edit(_id) {
-      user = users[_id];
-      role = roles[user.role_id]
-      user_edit_role(role._id)
-      document.getElementById("slide-over-title").innerHTML = user.username;
-      document.getElementById("username").value = user.username;
-      document.getElementById("listbox-option-selected").innerHTML = role.name;
-
-      edit_menu_show();
-    }
-
-    function user_edit_role(_id) {
-      role = roles[_id];
-      Object.keys(roles).forEach(function (key) {
-        document.getElementById("role_" + key).classList.add("hidden");
-      })
-      document.getElementById("role_"+_id).classList.remove("hidden");
-      document.getElementById("listbox-option-selected").innerHTML = role.name;
-    }
-
-    function listbox_dropdown_toggle() {
-      document.getElementById("listbox-dropdown").classList.toggle("hidden");
-    }
-
-    let edit_menu_state = false;
-    function edit_menu_show() {
-      document.getElementById("edit-background").classList.remove("invisible");
-      document.getElementById("edit-panel").classList.remove("translate-x-full");
-      document.getElementById("edit-panel").classList.add("translate-x-0");
-      edit_menu_state = true;
-    }
-    function edit_menu_hide() {
-      document.getElementById("edit-panel").classList.add("translate-x-full");
-      document.getElementById("edit-panel").classList.remove("translate-x-0");
-      setTimeout(function() {
-        document.getElementById("edit-background").classList.add("invisible");
-      }, 500);
-      status_text(document.getElementById("role-error-text"));
-      status_text(document.getElementById("username-error-text"));
-      edit_menu_state = false;
-      if (qrefresh) location.reload();
-    }
-    function edit_menu_toggle() {
-      if (edit_menu_state) edit_menu_hide();
-      else edit_menu_show();
-      edit_menu_state = !edit_menu_state;
-    }
-
-    document.getElementById("edit-user-submit").addEventListener("click", function (event) {
-      event.preventDefault();
-
-      if (role._id != user.role_id) {
-        $.ajax({
-          type: 'PUT',
-          url: '/api/auth/role/update',
-          contentType: 'application/json',
-          data: JSON.stringify({
-            id: user._id,
-            role: role._id,
-          }), // access in body
-        }).done(function (data, textStatus, xhr) {
-          qrefresh = true;
-        }).fail(function (data, textStatus, xhr) {
-        }).always(function (data, textStatus, xhr) {
-          status_text(document.getElementById("role-error-text"), (textStatus == "success" ? xhr : data));
-        });
-      }
-
-      if (document.getElementById("username").value != user.username) {
-        $.ajax({
-          type: 'PUT',
-          url: '/api/auth/user/change',
-          contentType: 'application/json',
-          data: JSON.stringify({
-            id: user._id,
-            username: document.getElementById("username").value,
-          }),
-        }).done(function (data, textStatus, xhr) {
-          qrefresh = true;
-        }).fail(function (data, textStatus, xhr) {
-        }).always(function (data, textStatus, xhr) {
-          status_text(document.getElementById("username-error-text"), (textStatus == "success" ? xhr : data));
-        });
-      }
-
-
-
-
-      //edit_menu_hide();
-    })
-  #user_create_backdrop.relative.z-10.duration-300.pointer-events-none(class="ease-in opacity-0", aria-labelledby='modal-title', role='dialog', aria-modal='true')
-    //
-      Background backdrop, show/hide based on modal state.
-      Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-      Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-    .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
-    .fixed.inset-0.z-10.overflow-y-auto
-      #user_create_panel.flex.min-h-full.items-end.justify-center.p-4.text-center.duration-300(class='sm:items-center sm:p-0 ease-in opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95')
-
-        //
-          Modal panel, show/hide based on modal state.
-          Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-          Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-        .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
-          div
-            .mx-auto.flex.h-12.w-12.items-center.justify-center.rounded-full.bg-yellow-100
-              // Heroicon name: outline/check
-              svg.h-6.w-6.text-green-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='#000000', aria-hidden='true')
-                path(stroke-linecap='round', stroke-linejoin='round', d='M12 4.5v15m7.5-7.5h-15')
-            .mt-3.text-center(class='sm:mt-5')
-              h3#user_create_title.text-lg.font-medium.leading-6.text-gray-900 Add User
-                form.space-y-6.mt-2(action='#', method='POST')
-                  div
-                    label.block.text-sm.font-medium.text-gray-700.text-left(for='user_create_username') Username
-                    .mt-1
-                      input#user_create_username.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='username', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
-                  div
-                    label.block.text-sm.font-medium.text-gray-700.text-left(for='user_create_password') Password
-                    .mt-1
-                      input#user_create_password.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(disabled=true, name='password', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
-                  .mt-5
-                    span.text-sm.ml-auto#user_create_error &nbsp;
-                  .mt-5(class='sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3')
-                    button#user_create_submit.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm') Add User
-                    button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm' onclick="hide_user_create()") Cancel
-
-  script.
-    function show_user_create() {
-      status_text(document.getElementById("user_create_error"));
-      document.getElementById("user_create_backdrop").classList.remove("ease-in", "opacity-0", "pointer-events-none");
-      document.getElementById("user_create_backdrop").classList.add("ease-out", "opacity-100");
-      document.getElementById("user_create_panel").classList.remove("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
-      document.getElementById("user_create_panel").classList.add("ease-out", "opacity-100", "translate-y-0", "sm:scale-100");
-      document.getElementById("user_create_password").value = random_password();
-    }
-
-    function hide_user_create() {
-      document.getElementById("user_create_backdrop").classList.remove("ease-out", "opacity-100");
-      document.getElementById("user_create_backdrop").classList.add("ease-in", "opacity-0", "pointer-events-none");
-      document.getElementById("user_create_panel").classList.remove("ease-out", "opacity-100", "translate-y-0", "sm:scale-100");
-      document.getElementById("user_create_panel").classList.add("ease-in", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
-      if (qrefresh) location.reload();
-    }
-
-    function random_password() {
-      let length = 12,
-              charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-              retVal = "";
-      for (let i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-      }
-      return retVal;
-    }
-
-    document.getElementById("user_create_submit").addEventListener("click", function(event) {
-      event.preventDefault();
-      let data = {
-        username: document.getElementById("user_create_username").value,
-        password: document.getElementById("user_create_password").value,
-      }
-
-      $.ajax({
-        type: 'POST',
-        url: '/api/auth/user/register',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-      }).done(function (data, textStatus, xhr) {
-        qrefresh = true;
-        hide_user_create();
-      }).fail(function (data, textStatus, xhr) {
-      }).always(function (data, textStatus, xhr) {
-        status_text(document.getElementById("user_create_error"), (textStatus == "success" ? xhr : data));
-      });
-    });
-
-  main.flex-1
-    .mt-8
-      .inline-block.min-w-full.border-b.border-gray-200.align-middle
-        table.min-w-full
-          thead
-            tr.border-t.border-gray-200
-              th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col')
-                span(class='lg:pl-2').align-middle Role
-              th.border-b.border-gray-200.bg-gray-50.px-6.py-3.text-left.text-sm.font-semibold.text-gray-900(scope='col') ID
-              th.border-b.border-gray-200.bg-gray-50.py-3.pr-6.text-right.text-sm.font-semibold.text-gray-900(scope='col')
-          tbody.divide-y.divide-gray-100.bg-white
-            each role in roles
-              tr
-                td.w-full.max-w-0.whitespace-nowrap.px-6.py-3.text-sm.font-medium.text-gray-900
-                  .flex.items-center.space-x-3(class='lg:pl-2')
-                    if (role.permissions.admin)
-                      .flex-shrink-0.rounded-full.bg-red-800(class='w-2.5 h-2.5', aria-hidden='true')
-                    else
-                      .flex-shrink-0.rounded-full.bg-transparent(class='w-2.5 h-2.5', aria-hidden='true')
-                    a.truncate(href='#', class='hover:text-gray-600')
-                      span=role.name
-                td.px-6.py-3.text-sm.font-medium.text-gray-500
-                  .flex.items-center.space-x-2
-                    .flex.flex-shrink-0.-space-x-1
-                      if (role.permissions.admin)
-                        span.flex-shrink-0.text-xs.font-medium.leading-5.text-red-800=role._id
-                      else
-                        span.flex-shrink-0.text-xs.font-medium.leading-5=role._id
-                td.whitespace-nowrap.px-6.py-3.text-right.text-sm.font-medium
-                  a.text-emerald-600(href='#', class='hover:text-emerald-900', onClick="role_edit('" + role._id + "')") Edit
-              // More projects...
-  .relative.mt-4
-    .absolute.inset-0.flex.items-center(aria-hidden='true')
-      .w-full.border-t.border-gray-300
-    .relative.flex.justify-center
-      button.inline-flex.items-center.rounded-full.border.border-gray-300.bg-white.px-4.text-sm.font-medium.leading-5.text-gray-700.shadow-sm(type='button', class='py-1.5 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2', onClick="show_role_create()")
-        // Heroicon name: mini/plus
-        svg.mr-1.h-5.w-5.text-gray-400(class='-ml-1.5', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
-          path(d='M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z')
-        span Add Role
-  #role_edit_backdrop.pointer-events-none.relative.z-10(aria-labelledby='slide-over-title', role='dialog', aria-modal='true')
-    // Background backdrop, show/hide based on slide-over state.
-    .fixed.inset-0
-    .fixed.inset-0.overflow-hidden
-      .absolute.inset-0.overflow-hidden
-        #role_edit_panel.pointer-events-none.fixed.inset-y-0.right-0.flex.max-w-full.pl-10(class='sm:pl-16 transform transition ease-in-out duration-500 sm:duration-700 translate-x-full')
-          //
-            Slide-over panel, show/hide based on slide-over state.
-            Entering: "transform transition ease-in-out duration-500 sm:duration-700"
-            From: "translate-x-full"
-            To: "translate-x-0"
-            Leaving: "transform transition ease-in-out duration-500 sm:duration-700"
-            From: "translate-x-0"
-            To: "translate-x-full"
-          .pointer-events-auto.w-screen.max-w-md
-            .flex.h-full.flex-col.overflow-y-scroll.bg-white.shadow-xl
-              .p-6
-                .flex.items-start.justify-between
-                  h2.text-lg.font-medium.text-gray-900 Permissions
-                  .ml-3.flex.h-7.items-center
-                    span.isolate.inline-flex.rounded-md.shadow-sm.mr-4
-                      button#edit_role_delete.relative.inline-flex.items-center.rounded-l-md.border.border-red-300.bg-white.px-4.py-2.text-sm.font-medium.text-red-700(type='button', class='hover:bg-red-50 focus:z-10 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500') Delete
-                      button#edit_role_save.relative.-ml-px.inline-flex.items-center.rounded-r-md.border.border-green-300.bg-white.px-4.py-2.text-sm.font-medium.text-green-700(type='button', class='hover:bg-green-50 focus:z-10 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500') Save
-                    //button#edit_role_save.inline-flex.items-center.rounded-full.border.border-transparent.bg-green-600.px-4.py-2.text-sm.font-medium.text-white.shadow-sm.mr-4(type='button', class='hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2') Save
-                    button.rounded-md.bg-white.text-gray-400(type='button', class='hover:text-gray-500 focus:ring-2 focus:ring-emerald-500', onclick="hide_role_edit()")
-                      span.sr-only Close panel
-                      // Heroicon name: outline/x-mark
-                      svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
-                        path(stroke-linecap='round', stroke-linejoin='round', d='M6 18L18 6M6 6l12 12')
-              .border-l-4.border-red-400.bg-red-50.p-4.mb-4#role_edit_fail_banner.hidden
-                .flex
-                  .flex-shrink-0
-                    // Heroicon name: mini/exclamation-triangle
-                    svg.h-5.w-5.text-red-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
-                      path(fill-rule='evenodd', d='M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z', clip-rule='evenodd')
-                  .ml-3
-                    p#role_edit_fail_banner_text.text-sm.text-red-700 Error Message
-              .border-l-4.border-green-400.bg-green-50.p-4.mb-4#role_edit_success_banner.hidden
-                .flex
-                  .flex-shrink-0
-                    // Heroicon name: mini/exclamation-triangle
-                    svg.text-green-400.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                      path(stroke-linecap='round', stroke-linejoin='round', d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
-                  .ml-3
-                    p#role_edit_success_banner_text.text-sm.text-green-700 Success Message
-
-              .border-b.border-gray-200
-                .px-6
-                  nav.-mb-px.flex.space-x-6
-                    // Current: "border-emerald-500 text-emerald-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                    a.permission_selector.cursor-pointer.border-emerald-500.text-emerald-600.whitespace-nowrap.pb-4.px-1.border-b-2.font-medium.text-sm(id="selector_null", onclick="role_category_toggle()") All
-                    each permission_category in permission_categories
-                      a.permission_selector.cursor-pointer.border-transparent.text-gray-500.whitespace-nowrap.pb-4.px-1.border-b-2.font-medium.text-sm(id="selector_"+permission_category, onclick="role_category_toggle('" + permission_category + "')", class='hover:text-gray-700 hover:border-gray-300')=permission_category
-              ul.p-4.category_selector_item.flex-1.divide-y.divide-gray-200.overflow-y-auto(id="selector_item_null", role='list')
-                each permission in permissions
-                  li.m-2.pt-2
-                    .relative.flex.items-start
-                      .flex.h-5.items-center
-                        input.h-4.w-4.rounded.border-gray-300.text-emerald-600(id=permission, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500 '+permission, onchange="role_edit_toggle_permission('" + permission + "')")
-                      .ml-3.text-sm
-                        label.font-medium.text-gray-700(for=permission)=permission
-              each permission_category in permission_categories
-                ul.p-4.hidden.category_selector_item.flex-1.divide-y.divide-gray-200.overflow-y-auto(id="selector_item_"+permission_category, role='list')
+                .border-b.border-gray-200
+                  .px-6
+                    nav.-mb-px.flex.space-x-6
+                      // Current: "border-emerald-500 text-emerald-600", Default: "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                      a.permission_selector.cursor-pointer.border-emerald-500.text-emerald-600.whitespace-nowrap.pb-4.px-1.border-b-2.font-medium.text-sm(id="selector_null", onclick="role_category_toggle()") All
+                      each permission_category in permission_categories
+                        a.permission_selector.cursor-pointer.border-transparent.text-gray-500.whitespace-nowrap.pb-4.px-1.border-b-2.font-medium.text-sm(id="selector_"+permission_category, onclick="role_category_toggle('" + permission_category + "')", class='hover:text-gray-700 hover:border-gray-300')=permission_category
+                ul.p-4.category_selector_item.flex-1.divide-y.divide-gray-200.overflow-y-auto(id="selector_item_null", role='list')
                   each permission in permissions
-                    if permission.startsWith(permission_category)
-                      li.m-2.pt-2
-                        .relative.flex.items-start
-                          .flex.h-5.items-center
-                            input.h-4.w-4.rounded.border-gray-300.text-emerald-600(id=permission, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500 '+permission, onchange="role_edit_toggle_permission('" + permission + "')")
-                          .ml-3.text-sm
-                            label.font-medium.text-gray-700(for=permission)=permission
+                    li.m-2.pt-2
+                      .relative.flex.items-start
+                        .flex.h-5.items-center
+                          input.h-4.w-4.rounded.border-gray-300.text-emerald-600(id=permission, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500 '+permission, onchange="role_edit_toggle_permission('" + permission + "')")
+                        .ml-3.text-sm
+                          label.font-medium.text-gray-700(for=permission)=permission
+                each permission_category in permission_categories
+                  ul.p-4.hidden.category_selector_item.flex-1.divide-y.divide-gray-200.overflow-y-auto(id="selector_item_"+permission_category, role='list')
+                    each permission in permissions
+                      if permission.startsWith(permission_category)
+                        li.m-2.pt-2
+                          .relative.flex.items-start
+                            .flex.h-5.items-center
+                              input.h-4.w-4.rounded.border-gray-300.text-emerald-600(id=permission, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500 '+permission, onchange="role_edit_toggle_permission('" + permission + "')")
+                            .ml-3.text-sm
+                              label.font-medium.text-gray-700(for=permission)=permission
 
 
-  script.
-    function role_category_toggle(category = null) {
-      let category_selectors = document.getElementsByClassName("permission_selector")
-      let category_selector_items = document.getElementsByClassName("category_selector_item")
-      for (let i = 0; i < category_selectors.length; i++) {
-        if (category_selectors[i].id === "selector_" + category) {
-          category_selectors[i].classList.remove("border-transparent","text-gray-500","hover:text-gray-700","hover:border-gray-300")
-          category_selectors[i].classList.add("border-emerald-500","text-emerald-600");
+    script.
+      function role_category_toggle(category = null) {
+        let category_selectors = document.getElementsByClassName("permission_selector")
+        let category_selector_items = document.getElementsByClassName("category_selector_item")
+        for (let i = 0; i < category_selectors.length; i++) {
+          if (category_selectors[i].id === "selector_" + category) {
+            category_selectors[i].classList.remove("border-transparent","text-gray-500","hover:text-gray-700","hover:border-gray-300")
+            category_selectors[i].classList.add("border-emerald-500","text-emerald-600");
 
-        } else {
-          category_selectors[i].classList.add("border-transparent", "text-gray-500", "hover:text-gray-700", "hover:border-gray-300")
-          category_selectors[i].classList.remove("border-emerald-500", "text-emerald-600");
-        }
+          } else {
+            category_selectors[i].classList.add("border-transparent", "text-gray-500", "hover:text-gray-700", "hover:border-gray-300")
+            category_selectors[i].classList.remove("border-emerald-500", "text-emerald-600");
+          }
 
-        if (category_selector_items[i].id === "selector_item_" + category) {
-          category_selector_items[i].classList.remove("hidden");
-        } else {
-          category_selector_items[i].classList.add("hidden");
+          if (category_selector_items[i].id === "selector_item_" + category) {
+            category_selector_items[i].classList.remove("hidden");
+          } else {
+            category_selector_items[i].classList.add("hidden");
+          }
         }
       }
-    }
-    let role_editing = null;
-    function role_edit(_id) {
-      role_editing = $.extend(true, {}, roles[_id]);
-      Object.keys(role_editing.permissions).forEach((permission) => {
+      let role_editing = null;
+      function role_edit(_id) {
+        role_editing = $.extend(true, {}, roles[_id]);
+        Object.keys(role_editing.permissions).forEach((permission) => {
+          let objects = document.getElementsByClassName(permission);
+          for(let i = 0; i < objects.length; i++) objects[i].checked = role_editing.permissions[permission];
+        });
+        show_role_edit();
+      }
+
+      function role_edit_toggle_permission(permission) {
+        role_editing.permissions[permission] = !role_editing.permissions[permission];
         let objects = document.getElementsByClassName(permission);
-        for(let i = 0; i < objects.length; i++) objects[i].checked = role_editing.permissions[permission];
+        for (let i = 0; i < objects.length; i++) objects[i].checked = role_editing.permissions[permission];
+      }
+
+      document.getElementById("edit_role_save").addEventListener("click", function(event) {
+        event.preventDefault();
+        let data = {
+          _id: role_editing._id,
+          permissions: role_editing.permissions,
+        }
+        $.ajax({
+          type: "PUT",
+          url: "/api/auth/role/permissions/change",
+          contentType: "application/json",
+          data: JSON.stringify(data)
+        }).done(function (data, textStatus, xhr) {
+          document.getElementById("role_edit_fail_banner").classList.add("hidden");
+          document.getElementById("role_edit_success_banner_text").innerHTML = xhr.responseJSON.message;
+          document.getElementById("role_edit_success_banner").classList.remove("hidden");
+          setTimeout(function () {
+            hide_role_edit();
+            location.reload();
+          }, 1500);
+        }).fail(function (data, textStatus, xhr) {
+          document.getElementById("role_edit_success_banner").classList.add("hidden");
+          document.getElementById("role_edit_fail_banner_text").innerHTML = data.responseJSON.message;
+          document.getElementById("role_edit_fail_banner").classList.remove("hidden");
+        })
       });
-      show_role_edit();
-    }
 
-    function role_edit_toggle_permission(permission) {
-      role_editing.permissions[permission] = !role_editing.permissions[permission];
-      let objects = document.getElementsByClassName(permission);
-      for (let i = 0; i < objects.length; i++) objects[i].checked = role_editing.permissions[permission];
-    }
-
-    document.getElementById("edit_role_save").addEventListener("click", function(event) {
-      event.preventDefault();
-      let data = {
-        _id: role_editing._id,
-        permissions: role_editing.permissions,
-      }
-      $.ajax({
-        type: "PUT",
-        url: "/api/auth/role/permissions/change",
-        contentType: "application/json",
-        data: JSON.stringify(data)
-      }).done(function (data, textStatus, xhr) {
-        document.getElementById("role_edit_fail_banner").classList.add("hidden");
-        document.getElementById("role_edit_success_banner_text").innerHTML = xhr.responseJSON.message;
-        document.getElementById("role_edit_success_banner").classList.remove("hidden");
-        setTimeout(function () {
-          hide_role_edit();
-          location.reload();
-        }, 1500);
-      }).fail(function (data, textStatus, xhr) {
-        document.getElementById("role_edit_success_banner").classList.add("hidden");
-        document.getElementById("role_edit_fail_banner_text").innerHTML = data.responseJSON.message;
-        document.getElementById("role_edit_fail_banner").classList.remove("hidden");
-      })
-    });
-
-    document.getElementById("edit_role_delete").addEventListener("click", function(event) {
-      event.preventDefault();
-      let data = {
-        _id: role_editing._id,
-      }
-      $.ajax({
-        type: "PUT",
-        url: "/api/auth/role/delete",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-      }).done(function (data, textStatus, xhr) {
-        document.getElementById("role_edit_fail_banner").classList.add("hidden");
-        document.getElementById("role_edit_success_banner_text").innerHTML = xhr.responseJSON.message;
-        document.getElementById("role_edit_success_banner").classList.remove("hidden");
-        setTimeout(function () {
-          hide_role_edit();
-          location.reload();
-        }, 1500);
-      }).fail(function (data, textStatus, xhr) {
-        document.getElementById("role_edit_success_banner").classList.add("hidden");
-        document.getElementById("role_edit_fail_banner_text").innerHTML = data.responseJSON.message;
-        document.getElementById("role_edit_fail_banner").classList.remove("hidden");
-      })
-    });
-
-    function show_role_edit() {
-      document.getElementById("role_edit_fail_banner").classList.add("hidden");
-      document.getElementById("role_edit_success_banner").classList.add("hidden");
-
-      document.getElementById("role_edit_backdrop").classList.remove("pointer-events-none");
-      document.getElementById("role_edit_panel").classList.remove("transform","transition","ease-in-out","duration-500","sm:duration-700", "translate-x-full");
-      document.getElementById("role_edit_panel").classList.add("transform","transition","ease-in-out","duration-500","sm:duration-700","translate-x-0");
-    }
-
-    function hide_role_edit() {
-      document.getElementById("role_edit_backdrop").classList.add("pointer-events-none");
-      document.getElementById("role_edit_panel").classList.remove("transform", "transition", "ease-in-out", "duration-500", "sm:duration-700", "translate-x-0");
-      document.getElementById("role_edit_panel").classList.add("transform", "transition", "ease-in-out", "duration-500", "sm:duration-700", "translate-x-full");
-    }
-
-  #role_create_backdrop.relative.z-10.pointer-events-none(class="ease-in opacity-0 duration-200", aria-labelledby='modal-title', role='dialog', aria-modal='true')
-    //
-      Background backdrop, show/hide based on modal state.
-      Entering: "ease-out duration-300"
-      From: "opacity-0"
-      To: "opacity-100"
-      Leaving: "ease-in duration-200"
-      From: "opacity-100"
-      To: "opacity-0"
-    .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
-    .fixed.inset-0.z-10.overflow-y-auto
-      #role_create_panel.flex.min-h-full.items-end.justify-center.p-4.text-center(class='sm:items-center sm:p-0 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95')
-
-        //
-          Modal panel, show/hide based on modal state.
-          Entering: "ease-out duration-300"
-          From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-          To: "opacity-100 translate-y-0 sm:scale-100"
-          Leaving: "ease-in duration-200"
-          From: "opacity-100 translate-y-0 sm:scale-100"
-          To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-        .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
-          div
-            .mx-auto.flex.h-12.w-12.items-center.justify-center.rounded-full.bg-yellow-100
-              // Heroicon name: outline/check
-              svg.h-6.w-6.text-green-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='#000000', aria-hidden='true')
-                path(stroke-linecap='round', stroke-linejoin='round', d='M12 4.5v15m7.5-7.5h-15')
-            .mt-3.text-center(class='sm:mt-5')
-              h3#role_create_title.text-lg.font-medium.leading-6.text-gray-900 Add Role
-                form.space-y-6.mt-2(action='#', method='POST')
-                  div
-                    label.block.text-sm.font-medium.text-gray-700.text-left(for='role_create_name') Role Name
-                    .mt-1
-                      input#role_create_name.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='username', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
-                  div
-                    label.block.text-sm.font-medium.text-gray-700.text-left(for='role_create_template_id') Template ID
-                    .mt-1
-                      input#role_create_template_id.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='template_id', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
-                  .mt-5
-                    span.text-sm.ml-auto#role_create_error &nbsp;
-                  .mt-5(class='sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3')
-                    button#role_create_submit.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm') Add Role
-                    button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm' onclick="hide_role_create()") Cancel
-  script.
-    function show_role_create() {
-      document.getElementById("role_create_backdrop").classList.remove("opacity-0", "ease-in", "duration-200", "pointer-events-none");
-      document.getElementById("role_create_backdrop").classList.add("ease-out", "duration-300", "opacity-100");
-      document.getElementById("role_create_panel").classList.remove("ease-in", "duration-200", "opacity-0", "translate-y-4","sm:translate-y-0","sm:scale-95");
-      document.getElementById("role_create_panel").classList.add("ease-out","duration-300","opacity-100","translate-y-0","sm:scale-100");
-
-    }
-
-    function hide_role_create() {
-      document.getElementById("role_create_backdrop").classList.remove("ease-out", "duration-300", "opacity-100");
-      document.getElementById("role_create_backdrop").classList.add("opacity-0", "ease-in", "duration-200", "pointer-events-none");
-      document.getElementById("role_create_panel").classList.remove("ease-out", "duration-300", "opacity-100", "translate-y-0", "sm:scale-100");
-      document.getElementById("role_create_panel").classList.add("ease-in", "duration-200", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
-      if (qrefresh) {
-        location.reload();
-      }
-    }
-
-    document.getElementById("role_create_submit").addEventListener("click", function (event) {
-      event.preventDefault();
-      let data = {
-        name: document.getElementById("role_create_name").value,
-        template_id: (document.getElementById("role_create_template_id").value == "" ? null : document.getElementById("role_create_template_id").value)
-      }
-
-      $.ajax({
-        type: "POST",
-        url: "/api/auth/role/create",
-        contentType: "application/json",
-        data: JSON.stringify(data),
-      }).done(function (data, textStatus, xhr) {
-        qrefresh = true;
-        hide_role_create();
-      }).fail(function (data, textStatus, xhr) {
-      }).always(function (data, textStatus, xhr) {
-        status_text(document.getElementById("role_create_error"), (textStatus == "success" ? xhr : data));
+      document.getElementById("edit_role_delete").addEventListener("click", function(event) {
+        event.preventDefault();
+        let data = {
+          _id: role_editing._id,
+        }
+        $.ajax({
+          type: "PUT",
+          url: "/api/auth/role/delete",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+        }).done(function (data, textStatus, xhr) {
+          document.getElementById("role_edit_fail_banner").classList.add("hidden");
+          document.getElementById("role_edit_success_banner_text").innerHTML = xhr.responseJSON.message;
+          document.getElementById("role_edit_success_banner").classList.remove("hidden");
+          setTimeout(function () {
+            hide_role_edit();
+            location.reload();
+          }, 1500);
+        }).fail(function (data, textStatus, xhr) {
+          document.getElementById("role_edit_success_banner").classList.add("hidden");
+          document.getElementById("role_edit_fail_banner_text").innerHTML = data.responseJSON.message;
+          document.getElementById("role_edit_fail_banner").classList.remove("hidden");
+        })
       });
-    })
+
+      function show_role_edit() {
+        document.getElementById("role_edit_fail_banner").classList.add("hidden");
+        document.getElementById("role_edit_success_banner").classList.add("hidden");
+
+        document.getElementById("role_edit_backdrop").classList.remove("pointer-events-none");
+        document.getElementById("role_edit_panel").classList.remove("transform","transition","ease-in-out","duration-500","sm:duration-700", "translate-x-full");
+        document.getElementById("role_edit_panel").classList.add("transform","transition","ease-in-out","duration-500","sm:duration-700","translate-x-0");
+      }
+
+      function hide_role_edit() {
+        document.getElementById("role_edit_backdrop").classList.add("pointer-events-none");
+        document.getElementById("role_edit_panel").classList.remove("transform", "transition", "ease-in-out", "duration-500", "sm:duration-700", "translate-x-0");
+        document.getElementById("role_edit_panel").classList.add("transform", "transition", "ease-in-out", "duration-500", "sm:duration-700", "translate-x-full");
+      }
+
+    #role_create_backdrop.relative.z-10.pointer-events-none(class="ease-in opacity-0 duration-200", aria-labelledby='modal-title', role='dialog', aria-modal='true')
+      //
+        Background backdrop, show/hide based on modal state.
+        Entering: "ease-out duration-300"
+        From: "opacity-0"
+        To: "opacity-100"
+        Leaving: "ease-in duration-200"
+        From: "opacity-100"
+        To: "opacity-0"
+      .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
+      .fixed.inset-0.z-10.overflow-y-auto
+        #role_create_panel.flex.min-h-full.items-end.justify-center.p-4.text-center(class='sm:items-center sm:p-0 ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95')
+
+          //
+            Modal panel, show/hide based on modal state.
+            Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+            Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          .relative.transform.overflow-hidden.rounded-lg.bg-white.px-4.pt-5.pb-4.text-left.shadow-xl.transition-all(class='sm:my-8 sm:w-full sm:max-w-lg sm:p-6')
+            div
+              .mx-auto.flex.h-12.w-12.items-center.justify-center.rounded-full.bg-yellow-100
+                // Heroicon name: outline/check
+                svg.h-6.w-6.text-green-600(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='#000000', aria-hidden='true')
+                  path(stroke-linecap='round', stroke-linejoin='round', d='M12 4.5v15m7.5-7.5h-15')
+              .mt-3.text-center(class='sm:mt-5')
+                h3#role_create_title.text-lg.font-medium.leading-6.text-gray-900 Add Role
+                  form.space-y-6.mt-2(action='#', method='POST')
+                    div
+                      label.block.text-sm.font-medium.text-gray-700.text-left(for='role_create_name') Role Name
+                      .mt-1
+                        input#role_create_name.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='username', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                    div
+                      label.block.text-sm.font-medium.text-gray-700.text-left(for='role_create_template_id') Template ID
+                      .mt-1
+                        input#role_create_template_id.block.w-full.appearance-none.rounded-md.border.border-gray-300.px-3.py-2.placeholder-gray-400.shadow-sm(name='template_id', type='text', required='', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                    .mt-5
+                      span.text-sm.ml-auto#role_create_error &nbsp;
+                    .mt-5(class='sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3')
+                      button#role_create_submit.inline-flex.w-full.justify-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-base.font-medium.text-white.shadow-sm(type='submit', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm') Add Role
+                      button.mt-3.inline-flex.w-full.justify-center.rounded-md.border.border-gray-300.bg-white.px-4.py-2.text-base.font-medium.text-gray-700.shadow-sm(type='button', class='hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm' onclick="hide_role_create()") Cancel
+    script.
+      function show_role_create() {
+        document.getElementById("role_create_backdrop").classList.remove("opacity-0", "ease-in", "duration-200", "pointer-events-none");
+        document.getElementById("role_create_backdrop").classList.add("ease-out", "duration-300", "opacity-100");
+        document.getElementById("role_create_panel").classList.remove("ease-in", "duration-200", "opacity-0", "translate-y-4","sm:translate-y-0","sm:scale-95");
+        document.getElementById("role_create_panel").classList.add("ease-out","duration-300","opacity-100","translate-y-0","sm:scale-100");
+
+      }
+
+      function hide_role_create() {
+        document.getElementById("role_create_backdrop").classList.remove("ease-out", "duration-300", "opacity-100");
+        document.getElementById("role_create_backdrop").classList.add("opacity-0", "ease-in", "duration-200", "pointer-events-none");
+        document.getElementById("role_create_panel").classList.remove("ease-out", "duration-300", "opacity-100", "translate-y-0", "sm:scale-100");
+        document.getElementById("role_create_panel").classList.add("ease-in", "duration-200", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95");
+        if (qrefresh) {
+          location.reload();
+        }
+      }
+
+      document.getElementById("role_create_submit").addEventListener("click", function (event) {
+        event.preventDefault();
+        let data = {
+          name: document.getElementById("role_create_name").value,
+          template_id: (document.getElementById("role_create_template_id").value == "" ? null : document.getElementById("role_create_template_id").value)
+        }
+
+        $.ajax({
+          type: "POST",
+          url: "/api/auth/role/create",
+          contentType: "application/json",
+          data: JSON.stringify(data),
+        }).done(function (data, textStatus, xhr) {
+          qrefresh = true;
+          hide_role_create();
+        }).fail(function (data, textStatus, xhr) {
+        }).always(function (data, textStatus, xhr) {
+          status_text(document.getElementById("role_create_error"), (textStatus == "success" ? xhr : data));
+        });
+      })
+  else
+  .min-h-full.bg-transparent.px-4.py-16(class='sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8')
+    .mx-auto.max-w-max
+      maindiv(class='sm:flex')
+        p.text-4xl.font-bold.tracking-tight.text-emerald-600(class='sm:text-5xl') 403
+        div(class='sm:ml-6')
+          div(class='sm:border-l sm:border-gray-200 sm:pl-6')
+            h1.text-4xl.font-bold.tracking-tight.text-gray-900(class='sm:text-5xl') Forbidden
+            p.mt-1.text-base.text-gray-500 You do not have sufficient permissions to access this resource.
+          .mt-10.flex.space-x-3(class='sm:border-l sm:border-transparent sm:pl-6')
+            a.inline-flex.items-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-sm.font-medium.text-white.shadow-sm(href='/', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Go back to dashboard
+            //a.inline-flex.items-center.rounded-md.border.border-transparent.bg-emerald-100.px-4.py-2.text-sm.font-medium.text-emerald-700(href='#', class='hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Contact support

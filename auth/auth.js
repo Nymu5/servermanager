@@ -421,6 +421,11 @@ exports.auth_user = async (req, res, next) => {
         }
         res.locals.user = user;
         res.locals.url = url;
+        if (role.permissions.admin) {
+            Object.keys(role.permissions).forEach((permission) => {
+                role.permissions[permission] = true;
+            })
+        }
         res.locals.permissions = role.permissions;
         next();
     })

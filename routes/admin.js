@@ -5,7 +5,7 @@ const User = require("../model/User");
 const Role = require("../model/Role");
 
 /* GET home page. */
-router.get('/', auth_admin, async function(req, res, next) {
+router.get('/', async function(req, res, next) {
   const users = await User.find();
   const roles = await Role.find();
   let roles_mapped = {};
