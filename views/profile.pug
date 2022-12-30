@@ -1,11 +1,9 @@
 extends layout
 
 block content
-  div.mt-4
-    p.mt-1.max-w-2xl.text-sm.text-gray-500 Personal details.
-  .mt-5.border-t.border-gray-200
+  .overflow-hidden.bg-white.shadow.mt-5(class='rounded-lg').p-4
     dl.divide-y.divide-gray-200
-      .py-4(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5')
+      .pb-4.pt-2(class='sm:grid sm:grid-cols-3 sm:gap-4 sm:pb-5')
         dt.text-sm.font-medium.text-gray-500.self-center Username
         dd.mt-1.flex.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')
           span.flex-grow.self-center=user.username
@@ -29,15 +27,13 @@ block content
                 span=permission + ": "
                 span.text-green-600=permissions[permission]
                 br
-  .grid.grid-cols-1.gap-4.mt-8(class='sm:grid-cols-2')
-    .mb-auto.relative.flex.items-center.space-x-3.rounded-lg.border.border-gray-300.bg-white.px-6.py-5.shadow-sm(class='focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 hover:border-gray-400')
-      .flex-shrink-0.self-start
-        svg.w-10.h-10(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-          path(stroke-linecap='round', stroke-linejoin='round', d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z')
-      .min-w-0.flex-1.self-start.mb-2
+  .overflow-hidden.bg-white.shadow.mt-5(class='rounded-lg').p-4
+    div(class='md:grid md:grid-cols-3 md:gap-6')
+      div(class='md:col-span-1')
+        .px-0(class='sm:px-0')
+          h3.text-lg.font-medium.leading-6.text-gray-900.font-bold Change Username
+      .mt-5(class='md:col-span-2 md:mt-0')
         div(class='focus:outline-none')
-          p.text-lg.font-large.text-gray-900.font-bold Change Username
-          .mt-6
             form.space-y-6(action='#', method='POST')
               div
                 label.block.text-sm.font-medium.text-gray-700(for='username_new') New Username
@@ -61,14 +57,14 @@ block content
                 path(stroke-linecap='round', stroke-linejoin='round', d='M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
             .ml-3
               p.text-sm.text-green-700#username_success_banner_text Success Message
-    .mb-auto.relative.flex.items-center.space-x-3.rounded-lg.border.border-gray-300.bg-white.px-6.py-5.shadow-sm(class='focus-within:ring-2 focus-within:ring-emerald-500 focus-within:ring-offset-2 hover:border-gray-400')
-      .flex-shrink-0.self-start
-        svg.w-10.h-10(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-          path(stroke-linecap='round', stroke-linejoin='round', d='M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z')
-      .min-w-0.flex-1.self-start.mb-2
+      .relative.col-span-3.my-4
+        .absolute.inset-0.flex.items-center(aria-hidden='true')
+          .w-full.border-t.border-gray-300
+      div(class='md:col-span-1')
+        .px-0.pt-4(class='sm:px-0 md:pt-0')
+          h3.text-lg.font-medium.leading-6.text-gray-900.font-bold Change Password
+      .mt-5(class='md:col-span-2 md:mt-0')
         div(class='focus:outline-none')
-          p.text-lg.font-large.text-gray-900.font-bold Change Password
-          .mt-6
             form.space-y-6(action='#', method='POST')
               div
                 label.block.text-sm.font-medium.text-gray-700(for='password_new') Current Password
@@ -102,53 +98,53 @@ block content
               p#password_success_banner_text.text-sm.text-green-700 Success Message
 
 
-  script.
-    let qrefresh = false;
-    document.getElementById("username_new_submit").addEventListener("click", function(event) {
-      event.preventDefault();
-      let data = {
-        username: document.getElementById("username_new").value,
-      }
-      $.ajax({
-        type: 'PUT',
-        url: "/api/auth/user/update/username",
-        contentType: "application/json",
-        data: JSON.stringify(data)
-      }).done(function (data, textStatus, xhr) {
-        document.getElementById("username_fail_banner").classList.add("hidden");
-        document.getElementById("username_success_banner_text").innerHTML = xhr.responseJSON.message;
-        document.getElementById("username_success_banner").classList.remove("hidden");
-        setTimeout(function() {
-          location.reload();
-        }, 1000);
-      }).fail(function (data, textStatus, xhr) {
-        document.getElementById("username_success_banner").classList.add("hidden");
-        document.getElementById("username_fail_banner_text").innerHTML = data.responseJSON.message;
-        document.getElementById("username_fail_banner").classList.remove("hidden");
+    script.
+      let qrefresh = false;
+      document.getElementById("username_new_submit").addEventListener("click", function(event) {
+        event.preventDefault();
+        let data = {
+          username: document.getElementById("username_new").value,
+        }
+        $.ajax({
+          type: 'PUT',
+          url: "/api/auth/user/update/username",
+          contentType: "application/json",
+          data: JSON.stringify(data)
+        }).done(function (data, textStatus, xhr) {
+          document.getElementById("username_fail_banner").classList.add("hidden");
+          document.getElementById("username_success_banner_text").innerHTML = xhr.responseJSON.message;
+          document.getElementById("username_success_banner").classList.remove("hidden");
+          setTimeout(function() {
+            location.reload();
+          }, 1000);
+        }).fail(function (data, textStatus, xhr) {
+          document.getElementById("username_success_banner").classList.add("hidden");
+          document.getElementById("username_fail_banner_text").innerHTML = data.responseJSON.message;
+          document.getElementById("username_fail_banner").classList.remove("hidden");
+        })
       })
-    })
-    document.getElementById("password_new_submit").addEventListener("click", function(event) {
-      event.preventDefault();
-      let data = {
-        old_password: document.getElementById("password_old").value,
-        new_password: document.getElementById("password_new").value,
-        new_password_confirm: document.getElementById("password_new_confirm").value
-      }
-      $.ajax({
-        type: "PUT",
-        url: "/api/auth/user/update/password",
-        contentType: "application/json",
-        data: JSON.stringify(data)
-      }).done(function (data, textStatus, xhr) {
-        document.getElementById("password_fail_banner").classList.add("hidden");
-        document.getElementById("password_success_banner_text").innerHTML = xhr.responseJSON.message;
-        document.getElementById("password_success_banner").classList.remove("hidden");
-        setTimeout(function () {
-          location.reload();
-        }, 1000);
-      }).fail(function (data, textStatus, xhr) {
-        document.getElementById("password_success_banner").classList.add("hidden");
-        document.getElementById("password_fail_banner_text").innerHTML = data.responseJSON.message;
-        document.getElementById("password_fail_banner").classList.remove("hidden");
+      document.getElementById("password_new_submit").addEventListener("click", function(event) {
+        event.preventDefault();
+        let data = {
+          old_password: document.getElementById("password_old").value,
+          new_password: document.getElementById("password_new").value,
+          new_password_confirm: document.getElementById("password_new_confirm").value
+        }
+        $.ajax({
+          type: "PUT",
+          url: "/api/auth/user/update/password",
+          contentType: "application/json",
+          data: JSON.stringify(data)
+        }).done(function (data, textStatus, xhr) {
+          document.getElementById("password_fail_banner").classList.add("hidden");
+          document.getElementById("password_success_banner_text").innerHTML = xhr.responseJSON.message;
+          document.getElementById("password_success_banner").classList.remove("hidden");
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
+        }).fail(function (data, textStatus, xhr) {
+          document.getElementById("password_success_banner").classList.add("hidden");
+          document.getElementById("password_fail_banner_text").innerHTML = data.responseJSON.message;
+          document.getElementById("password_fail_banner").classList.remove("hidden");
+        })
       })
-    })

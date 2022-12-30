@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+    height: 100vh;
+}
+
+.-mt-safe-top {
+    margin-top: calc(-1 * env(safe-area-inset-top));
+}
+
+.-mb-safe-top {
+    margin-bottom: calc(-1 * env(safe-area-inset-top));
+}

@@ -17,6 +17,17 @@ function array_concat(array, start, end) {
     return concat;
 }
 
+exports.array_move = function(arr, old_index, new_index) {
+    if (new_index >= arr.length) {
+        var k = new_index - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; // for testing
+};
+
 exports.mapper = function(error, stdout, stderr, data_processing_function = null){
     if (error && error.code != 3) {
         //console.log(error)
@@ -101,18 +112,5 @@ exports.services_details = function(stdout) {
         if (lines[i].startsWith("         ")) continue;
         data[lines[i].slice(0,lines[i].indexOf(":")).trim()] = lines[i].slice(lines[i].indexOf(":")+1).trim();
     }
-    return data;
-
-    lines.forEach((line, i) => {
-        if (line.length<1) return data;
-        if (!line.startsWith("           ")) {
-            if (i == 0) data["Info"] = line.trim();
-            else {
-                if (line[9] === ":") data[line.slice(0,line.indexOf(":")).trim()] = line.slice(line.indexOf(":")+1).trim();
-            }
-        }
-
-
-    })
     return data;
 }

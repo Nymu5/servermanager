@@ -1,11 +1,51 @@
 doctype html
 html.h-full.bg-gray-100
   head
+    link(rel='manifest', href='/site.webmanifest')
+    meta(name='viewport' content='initial-scale = 1.0,maximum-scale = 1.0, viewport-fit=cover, user-scalable=no')
+    meta(name="apple-mobile-web-app-status-bar-style" content="black-translucent")
+    meta(name='apple-mobile-web-app-capable' content='yes')
+    link(rel='icon', type='image/png', sizes='196x196', href='assets/special/favicon-196.png')
+    link(rel='apple-touch-icon', href='assets/special/apple-icon-180.png')
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2048-2732.jpg', media='(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2732-2048.jpg', media='(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1668-2388.jpg', media='(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2388-1668.jpg', media='(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1536-2048.jpg', media='(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2048-1536.jpg', media='(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1668-2224.jpg', media='(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2224-1668.jpg', media='(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1620-2160.jpg', media='(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2160-1620.jpg', media='(device-width: 810px) and (device-height: 1080px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1290-2796.jpg', media='(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2796-1290.jpg', media='(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1179-2556.jpg', media='(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2556-1179.jpg', media='(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1284-2778.jpg', media='(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2778-1284.jpg', media='(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1170-2532.jpg', media='(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2532-1170.jpg', media='(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1125-2436.jpg', media='(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2436-1125.jpg', media='(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1242-2688.jpg', media='(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2688-1242.jpg', media='(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-828-1792.jpg', media='(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1792-828.jpg', media='(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1242-2208.jpg', media='(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-2208-1242.jpg', media='(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-750-1334.jpg', media='(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1334-750.jpg', media='(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-640-1136.jpg', media='(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)')
+    link(rel='apple-touch-startup-image', href='assets/special/apple-splash-1136-640.jpg', media='(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)')
+
+    //favicon / app icon of pwa
+    link(rel='icon' type='image/x-icon' href='/favicon.ico')
     title= title
     link(rel='stylesheet', href='/stylesheets/stylesheet.css')
     script(src="/javascripts/jquery-3.6.3.min.js")
   body.h-full
-    div
+    div.h-screen
       // Off-canvas menu for mobile, show/hide based on off-canvas menu state.
       #m1.relative.z-40.transition-opacity.ease-linear.duration-300.opacity-0(class='md:hidden', role='dialog', aria-modal='true')
         //
@@ -17,7 +57,7 @@ html.h-full.bg-gray-100
           From: "opacity-100"
           To: "opacity-0"
         #m4.fixed.inset-0.bg-gray-600.bg-opacity-75.hidden
-        #m2.fixed.inset-0.z-40.flex.transition.ease-in-out.duration-300.transform.-translate-x-full
+        #m2.fixed.inset-0.z-40.flex.transition.ease-in-out.duration-300.transform.-translate-x-full.h-screen
           //
             Off-canvas menu, show/hide based on off-canvas menu state.
             Entering: "transition ease-in-out duration-300 transform"
@@ -26,16 +66,16 @@ html.h-full.bg-gray-100
             Leaving: "transition ease-in-out duration-300 transform"
             From: "translate-x-0"
             To: "-translate-x-full"
-          #m3.relative.flex.w-full.max-w-xs.flex-1.flex-col.bg-gray-800.ease-in-out.duration-300.opacity-0
+          #m3.relative.flex.w-full.max-w-xs.flex-1.flex-col.bg-gray-800.ease-in-out.duration-300.opacity-0.pt-safe-top
             //
               Close button, show/hide based on off-canvas menu state.
               Entering: "ease-in-out duration-300"
               From: "opacity-0"
-              To: "opacity-100"
+              To: "opacity-100"Ï
               Leaving: "ease-in-out duration-300"
               From: "opacity-100"
               To: "opacity-0"
-            .absolute.top-0.right-0.-mr-12.pt-2
+            .absolute.top-0.right-0.-mr-12.pt-2.mt-safe-top
               button.ml-1.flex.h-10.w-10.items-center.justify-center.rounded-full(type='button', class='focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white' onclick="hide_menu()")
                 span.sr-only Close sidebar
                 // Heroicon name: outline/x-mark
@@ -46,26 +86,33 @@ html.h-full.bg-gray-100
                 img.h-8.w-auto(src='/assets/images/logo_nymus_1mb.png', alt='Your Company')
               nav.mt-5.space-y-1.px-2
                 // Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
-                a.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/', class='hover:bg-gray-700 hover:text-white')
+                a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/', class='hover:bg-gray-700 hover:text-white')
                   //Heroicon name: outline/home
                     Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
                   svg.text-gray-300.mr-4.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                     path(stroke-linecap='round', stroke-linejoin='round', d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25')
                       span.menu-item Dashboard
-                a.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/services', class='hover:bg-gray-700 hover:text-white')
-                  //Heroicon name: outline/home
-                    Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
-                  svg.text-gray-300.mr-4.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
-                    path(stroke-linecap='round', stroke-linejoin='round', d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z')
-                      span.menu-item Services
+                if (userpermissions.services_list)
+                  a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/services', class='hover:bg-gray-700 hover:text-white')
+                    //Heroicon name: outline/home
+                      Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
+                    svg.text-gray-300.mr-4.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                      path(stroke-linecap='round', stroke-linejoin='round', d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z')
+                        span.menu-item Services
+                if (userpermissions.apache2_config)
+                  a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/apache2', class='hover:bg-gray-700 hover:text-white')
+                    //Heroicon name: outline/home
+                      Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
+                    img.h-6.w-6.mr-3(src="assets/images/logo_apache2.png")
+                    span.menu-item Apache2
                 if (userpermissions.admin)
-                  a.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/admin', class='hover:bg-gray-700 hover:text-white')
+                  a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md(href='/admin', class='hover:bg-gray-700 hover:text-white')
                     // Heroicon name: outline/chart-bar
                     svg.text-gray-400.mr-4.flex-shrink-0.h-6.w-6(class='group-hover:text-gray-300', xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                       path(stroke-linecap='round', stroke-linejoin='round', d='M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75')
                         span.menu-item Admin
 
-            .flex.flex-shrink-0.bg-gray-700.p-4
+            .flex.flex-shrink-0.bg-gray-700.p-4.pb-safe-bottom
               a.group.block.w-full.flex-shrink-0(href='#')
                 .flex.items-center
                   div
@@ -88,20 +135,27 @@ html.h-full.bg-gray-100
               img.h-8.w-auto(src='/assets/images/logo_nymus_1mb.png', alt='Your Company')
             nav.mt-5.flex-1.space-y-1.px-2
               // Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white"
-              a.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/', class='hover:bg-gray-700 hover:text-white')
+              a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/', class='hover:bg-gray-700 hover:text-white')
                 //Heroicon name: outline/home
                   Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
                 svg.text-gray-300.mr-3.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                   path(stroke-linecap='round', stroke-linejoin='round', d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25')
                     span.menu-item Dashboard
-              a.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/services', class='hover:bg-gray-700 hover:text-white')
-                //Heroicon name: outline/home
-                  Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
-                svg.text-gray-300.mr-3.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
-                  path(stroke-linecap='round', stroke-linejoin='round', d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z')
-                    span.menu-item Services
+              if (userpermissions.services_list)
+                a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/services', class='hover:bg-gray-700 hover:text-white')
+                  //Heroicon name: outline/home
+                    Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
+                  svg.text-gray-300.mr-3.flex-shrink-0.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                    path(stroke-linecap='round', stroke-linejoin='round', d='M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z')
+                      span.menu-item Services
+              if (userpermissions.apache2_config)
+                a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/apache2', class='hover:bg-gray-700 hover:text-white')
+                  //Heroicon name: outline/home
+                    Current: "text-gray-300", Default: "text-gray-400 group-hover:text-gray-300"
+                  img.h-6.w-6.mr-3(src="assets/images/logo_apache2.png")
+                  span.menu-item Apache2
               if (userpermissions.admin)
-                a.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/admin', class='hover:bg-gray-700 hover:text-white')
+                a.cursor-pointer.text-gray-300.group.flex.items-center.px-2.py-2.text-sm.font-medium.rounded-md(href='/admin', class='hover:bg-gray-700 hover:text-white')
                   // Heroicon name: outline/chart-bar
                   svg.text-gray-400.mr-3.flex-shrink-0.h-6.w-6(class='group-hover:text-gray-300', xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
                     path(stroke-linecap='round', stroke-linejoin='round', d='M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75')
@@ -119,15 +173,15 @@ html.h-full.bg-gray-100
                     path(stroke-linecap='round', stroke-linejoin='round', d='M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z')
                     path(stroke-linecap='round', stroke-linejoin='round', d='M15 12a3 3 0 11-6 0 3 3 0 016 0z')
       .flex.flex-1.flex-col(class='md:pl-64')
-        .sticky.top-0.z-10.bg-gray-100.pl-1.pt-1(class='sm:pl-3 sm:pt-3 md:hidden')
-          button.inline-flex.h-12.w-12.items-center.justify-center.rounded-md.text-gray-500(type='button', class='-ml-0.5 -mt-0.5 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500' onclick="show_menu()")
-            span.sr-only Open sidebar
-            // Heroicon name: outline/bars-3
-            svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
-              path(stroke-linecap='round', stroke-linejoin='round', d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5')
-        main.flex-1
-          nav.flex.border-b.border-gray-200.bg-white(aria-label='Breadcrumb')
-            ol.mx-auto.flex.w-full.max-w-screen-xl.space-x-4.px-4(role='list', class='sm:px-6 lg:px-8')
+        .fixed.top-0.z-10.bg-gray-800.w-full.inline-flex.pt-safe-top
+          .bg-white.p-1.border-b.border-r.border-gray-200(class='sm:pl-3 sm:pt-3 md:hidden')
+            button.inline-flex.h-12.w-12.items-center.justify-center.rounded-md.text-gray-500(type='button', class='-ml-0.5 -mt-0.5 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-emerald-500' onclick="show_menu()")
+              span.sr-only Open sidebar
+              // Heroicon name: outline/bars-3
+              svg.h-6.w-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor', aria-hidden='true')
+                path(stroke-linecap='round', stroke-linejoin='round', d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5')
+          nav.flex.border-b.border-gray-200.bg-white(aria-label='Breadcrumb').grow
+            ol.flex.w-full.max-w-screen-xl.space-x-4.px-4(role='list', class='sm:px-6 lg:px-8')
               li.flex
                 .flex.items-center
                   a.text-gray-400(href='/', class='hover:text-gray-500')
@@ -139,13 +193,15 @@ html.h-full.bg-gray-100
                 .flex.items-center
                   svg.h-full.w-6.flex-shrink-0.text-gray-200(viewBox='0 0 24 44', preserveAspectRatio='none', fill='currentColor', xmlns='http://www.w3.org/2000/svg', aria-hidden='true')
                     path(d='M.293 0l22 22-22 22h1.414l22-22-22-22H.293z')
-                  a.ml-4.text-sm.font-medium.text-gray-500(href='/'+header === "Dashboard" ? "" : header.toLowerCase(), class='hover:text-gray-700')=header
+                  a.ml-4.text-sm.font-medium.text-gray-500(href='/' + header === "Dashboard" ? "" : header.toLowerCase(), class='hover:text-gray-700')=header
               li#breadcrumb_1.flex.hidden
                 .flex.items-center
                   svg.h-full.w-6.flex-shrink-0.text-gray-200(viewBox='0 0 24 44', preserveAspectRatio='none', fill='currentColor', xmlns='http://www.w3.org/2000/svg', aria-hidden='true')
                     path(d='M.293 0l22 22-22 22h1.414l22-22-22-22H.293z')
                   a#breadcrumb_1_label.ml-4.text-sm.font-medium.text-gray-500(href='', class='hover:text-gray-700', aria-current='page')
-          .py-6
+        main.flex-1.pb-8.pt-safe-top
+
+          .pt-20
             .mx-auto.max-w-7xl.px-4(class='sm:px-6 lg:px-8')
               .min-w-0.flex-1
                 h2.text-2xl.font-bold.leading-7.text-gray-900(class='sm:truncate sm:text-3xl sm:tracking-tight')=header

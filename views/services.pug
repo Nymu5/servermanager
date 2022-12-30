@@ -2,75 +2,85 @@ extends layout
 
 block content
   if (data.details == false && userpermissions.services_list)
-    .px-4(class='sm:px-6 lg:px-8')
-      .mt-8.flex.flex-col
-        .-my-2.-mx-4(class='sm:-mx-6 lg:-mx-8')
-          .inline-block.min-w-full.py-2.align-middle
-            .overflow-hidden.shadow-sm.ring-1.ring-black.ring-opacity-5
-              table.min-w-full.divide-y.divide-gray-300.max-w-full
-                colgroup
-                  col(width="100%")
-                  col(width="0%")
-                  col(width="0%")
-                  col(width="0%")
-                  col(width="0%")
-                thead.bg-gray-50
-                  tr
-                    th.pl-4.pr-3.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5 sm:pl-6 lg:pl-8') Service
-                    th.px-3.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5') Loaded
-                    th.px-3.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5') Status
-                    th.px-3.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5') Sub
-                    th.relative.pl-3.pr-4(scope='col', class='py-3.5 sm:pr-6 lg:pr-8')
-                      span.sr-only Details
-                tbody.divide-y.divide-gray-200.bg-white
-                  each service in Object.keys(data.data)
-                    tr
-                      td.whitespace-nowrap.py-4.pl-4.pr-3.text-sm.font-medium.text-gray-900(class='sm:pl-6 lg:pl-8 truncate' style="max-width:1px;")=service
-                      td.whitespace-nowrap.px-3.py-4.text-sm.text-gray-500(class=(data.data[service].loaded ? "text-green-600" : "text-red-600" ))
-                        if (data.data[service].loaded)
-                          svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                            path(stroke-linecap='round', stroke-linejoin='round', d='M4.5 12.75l6 6 9-13.5')
-                        else
-                          svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                            path(stroke-linecap='round', stroke-linejoin='round', d='M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
-                      case data.data[service].status
-                        when -2
-                          td.whitespace-nowrap.px-3.py-4.text-sm.text-red-600
-                            svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                              path(stroke-linecap='round', stroke-linejoin='round', d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z')
-                        when -1
-                          td.whitespace-nowrap.px-3.py-4.text-sm.text-red-600
-                            svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                              path(stroke-linecap='round', stroke-linejoin='round', d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z')
-                        when 0
-                          td.whitespace-nowrap.px-3.py-4.text-sm.text-yellow-600
-                            svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                              path(stroke-linecap='round', stroke-linejoin='round', d='M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
-                        when 1
-                          td.whitespace-nowrap.px-3.py-4.text-sm.text-green-600
-                            svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-                              path(stroke-linecap='round', stroke-linejoin='round', d='M4.5 12.75l6 6 9-13.5')
-                      td.whitespace-nowrap.px-3.py-4.text-sm.text-gray-500=data.data[service].sub
-                      td.relative.whitespace-nowrap.py-4.pl-3.pr-4.text-right.text-sm.font-medium(class='sm:pr-6 lg:pr-8')
-                        if (userpermissions.services_details)
-                          a.text-emerald-600(href='/services?service=' + service, class='hover:text-emerald-900')
-                            | Details
-                            span.sr-only=service
-                  // More people...
+    .overflow-hidden.bg-white.shadow.mt-5.rounded-lg
+      input#search.rounded-lg.w-full.text-sm(type='search', name='search', classname='block w-full border-gray-100 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 sm:text-sm', placeholder='Search Service...')
+    .overflow-hidden.bg-white.shadow.mt-5.rounded-lg
+      table.min-w-full.divide-y.divide-gray-300.max-w-full.-mt-1
+        colgroup
+          col(width="100%")
+          col(width="0%")
+          col(width="0%")
+          col(width="0%")
+          col(width="0%")
+        thead.bg-gray-50
+          tr
+            th.pl-4.pr-8.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5 sm:pl-6 lg:pl-8') Service
+            th.px-3.pr-8.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5') Status
+            th.px-3.pr-8.text-left.text-sm.font-semibold.text-gray-900(scope='col', class='py-3.5') Sub
+            th.relative.pl-3.pr-4(scope='col', class='py-3.5 sm:pr-6 lg:pr-8')
+              span.sr-only Details
+        tbody.divide-y.divide-gray-200.bg-white
+          each service in Object.keys(data.data)
+            tr.service-row(id="row_"+service)
+              td.whitespace-nowrap.py-4.pl-4.pr-3.text-sm.font-medium.text-gray-900(class='sm:pl-6 lg:pl-8 truncate' style="max-width:1px;")=service
+              case data.data[service].status
+                when -2
+                  td.whitespace-nowrap.px-3.py-4.text-sm.text-red-600
+                    svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                      path(stroke-linecap='round', stroke-linejoin='round', d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z')
+                when -1
+                  td.whitespace-nowrap.px-3.py-4.text-sm.text-red-600
+                    svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                      path(stroke-linecap='round', stroke-linejoin='round', d='M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z')
+                when 0
+                  td.whitespace-nowrap.px-3.py-4.text-sm.text-yellow-600
+                    svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                      path(stroke-linecap='round', stroke-linejoin='round', d='M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z')
+                when 1
+                  td.whitespace-nowrap.px-3.py-4.text-sm.text-green-600
+                    svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                      path(stroke-linecap='round', stroke-linejoin='round', d='M4.5 12.75l6 6 9-13.5')
+              td.whitespace-nowrap.px-3.py-4.text-sm.text-gray-500.pr-8=data.data[service].sub
+              td.relative.whitespace-nowrap.py-4.pl-3.pr-4.text-right.text-sm.font-medium(class='sm:pr-6 lg:pr-8')
+                if (userpermissions.services_details)
+                  a.text-emerald-600(href='/services?service=' + service, class='hover:text-emerald-900')
+                    | Details
+                    span.sr-only=service
+          // More people...
+    script.
+      function onSearch() {
+        let value = document.getElementById("search").value;
+        let services = document.getElementsByClassName("service-row");
+        for (let i = 0; i < services.length; i++) {
+          if (services[i].id.slice(3).indexOf(value) == -1) services[i].classList.add("hidden");
+          else services[i].classList.remove("hidden");
+        }
+      }
+      document.getElementById("search").addEventListener('input', onSearch);
+      document.getElementById("search").addEventListener('propertychange', onSearch);
   else if (userpermissions.services_details)
     script.
       document.getElementById("breadcrumb_1_label").innerHTML = "!{data.service}";
       document.getElementById("breadcrumb_1_label").href = "/services?service=!{data.service}";
       document.getElementById("breadcrumb_1").classList.remove("hidden");
 
-    #status_details_panel.overflow-hidden.bg-white.shadow.mt-5(class='sm:rounded-lg')
+    #status_details_panel.overflow-hidden.bg-white.shadow.mt-5(class='rounded-lg')
       .px-4.py-5(class='sm:px-6').flex.w-full
-        h3.text-lg.font-medium.leading-6.text-gray-900 Service Information:&nbsp;
-        h3#status_details_panel_svname.text-lg.font-medium.leading-6.text-gray-900=data.data.service
-        a.ml-auto.cursor-pointer.inline-flex(class="hover:text-emerald-600", onclick="location.reload()")
-          svg.w-6.h-6(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
-            path(stroke-linecap='round', stroke-linejoin='round', d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99')
-          span &nbsp;Refresh
+        div.flex-col
+          h3.text-lg.font-medium.leading-6.text-gray-400 Service Information:&nbsp;
+          h3#status_details_panel_svname.text-lg.font-medium.leading-6.text-gray-900.font-bold=data.service
+        div.ml-auto.inline-flex.gap-4
+          if (userpermissions.services_journal)
+            a#journal_button_open.cursor-pointer(class="hover:text-emerald-600").flex.flex-col.items-center.justify-end
+              svg.w-8.h-8.text-md.text-center(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+                path(stroke-linecap='round', stroke-linejoin='round', d='M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z')
+              p.text-xs.font-semibold Journal
+              //span &nbsp;Journal
+
+          a.cursor-pointer.inline-flex(class="hover:text-emerald-600", onclick="location.reload()").flex.flex-col.items-center.justify-end
+            svg.w-8.h-8(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor')
+              path(stroke-linecap='round', stroke-linejoin='round', d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99')
+            span.text-xs.font-semibold &nbsp;Refresh
 
       .border-t.border-gray-200.px-4.py-5(class='sm:p-0')
         dl(class='sm:divide-y sm:divide-gray-200')
@@ -93,50 +103,174 @@ block content
                 dt.text-sm.font-medium.text-gray-500=label
                 dd.mt-1.text-sm.text-gray-900(class='sm:col-span-2 sm:mt-0')=data.data[label]
 
-  else
-    .min-h-full.bg-transparent.px-4.py-16(class='sm:px-6 sm:py-24 md:grid md:place-items-center lg:px-8')
-      .mx-auto.max-w-max
-        maindiv(class='sm:flex')
-          p.text-4xl.font-bold.tracking-tight.text-emerald-600(class='sm:text-5xl') 403
-          div(class='sm:ml-6')
-            div(class='sm:border-l sm:border-gray-200 sm:pl-6')
-              h1.text-4xl.font-bold.tracking-tight.text-gray-900(class='sm:text-5xl') Forbidden
-              p.mt-1.text-base.text-gray-500 You do not have sufficient permissions to access this resource.
-            .mt-10.flex.space-x-3(class='sm:border-l sm:border-transparent sm:pl-6')
-              a.inline-flex.items-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-sm.font-medium.text-white.shadow-sm(href='/', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Go back to dashboard
-              //a.inline-flex.items-center.rounded-md.border.border-transparent.bg-emerald-100.px-4.py-2.text-sm.font-medium.text-emerald-700(href='#', class='hover:bg-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2') Contact support
+      if (userpermissions.services_journal)
+        #journal_backdrop.relative.z-10(aria-labelledby='modal-title', role='dialog', aria-modal='true', class="pointer-events-none ease-in duration-200 opacity-0")
+          //
+            Background backdrop, show/hide based on modal state.
+            Entering: "ease-out duration-300"
+            From: "opacity-0"
+            To: "opacity-100"
+            Leaving: "ease-in duration-200"
+            From: "opacity-100"
+            To: "opacity-0"
+          .fixed.inset-0.bg-gray-500.bg-opacity-75.transition-opacity
+          .fixed.inset-0.z-10.overflow-y-auto
+            #journal_panel.flex.min-h-full.items-center.justify-center.p-4.text-center(class="md:p-16 lg:p-32 xl:p-48  ease-in duration-200 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95")
+              //
+                Modal panel, show/hide based on modal state.
+                Entering: "ease-out duration-300"
+                From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                To: "opacity-100 translate-y-0 sm:scale-100"
+                Leaving: "ease-in duration-200"
+                From: "opacity-100 translate-y-0 sm:scale-100"
+                To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              .relative.transform.overflow-hidden.rounded-lg.bg-white.text-left.shadow-xl.transition-all.w-full(class="sm:w-full sm:max-w-6xl")
+                .flex.items-start.space-x-4.-m-1
+                  .min-w-0.flex-1
+                    .overflow-hidden.rounded-lg.border.border-gray-300.shadow-sm(class='focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500')
+                      label.sr-only(for='comment') Journal
+                      textarea#journal_text.block.w-full.resize-none.border-0.py-6.px-8(wrap="off", readonly=true, rows='15', name='journal', class='focus:ring-0 sm:text-sm', placeholder='Journal')
+                      // Spacer element to match the height of the toolbar
+                      .py-2(aria-hidden='true')
+                        // Matches height of button in toolbar (1px border + 36px content height)
+                        .py-px
+                          .h-9
+                    .absolute.inset-x-0.bottom-0.flex.justify-between.py-2.pl-3.pr-2.bg-gray-100.items-center
+                      .flex.items-center.space-x-5
+                        .flex.items-center
+                          button#journal_download.flex.h-10.w-10.items-center.justify-center.rounded-full.text-gray-400(class='-m-2.5 hover:text-gray-500')
+                            // Heroicon name: mini/paper-clip
+                            svg.h-5.w-5(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                              path(fill-rule='evenodd', d='M15.621 4.379a3 3 0 00-4.242 0l-7 7a3 3 0 004.241 4.243h.001l.497-.5a.75.75 0 011.064 1.057l-.498.501-.002.002a4.5 4.5 0 01-6.364-6.364l7-7a4.5 4.5 0 016.368 6.36l-3.455 3.553A2.625 2.625 0 119.52 9.52l3.45-3.451a.75.75 0 111.061 1.06l-3.45 3.451a1.125 1.125 0 001.587 1.595l3.454-3.553a3 3 0 000-4.242z', clip-rule='evenodd')
+                            span.sr-only Attach a file
+                      div.flex.inline-flex.items-end.gap-2
+                        div.flex.flex-col.items-center.gap-1
+                          input#journal_reverse.h-6.w-6.rounded.border-gray-300.text-emerald-600(checked=true, aria-describedby='comments-description', name='comments', type='checkbox', class='focus:ring-emerald-500')
+                          span.text-xs Reverse
+                        div.flex.flex-col.items-center.gap-1
+                          select#journal_lines.h-6.mt-1.block.w-full.rounded-md.border-gray-300.py-0.pl-3.pr-8.text-base.text-xs.appearance-none(name='location', class='focus:border-emerald-500 focus:outline-none focus:ring-emerald-500 sm:text-sm')
+                            option 10
+                            option 50
+                            option(selected=true) 100
+                            option 500
+                            option 1000
+                          span.text-xs Lines
+                        a#journal_reload.cursor-pointer(class="hover:text-emerald-600").self-center
+                          svg.w-8.h-8(xmlns='http://www.w3.org/2000/svg', fill='none', viewBox='0 0 24 24', stroke-width='1.5', stroke='currentColor').self-center
+                            path(stroke-linecap='round', stroke-linejoin='round', d='M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75')
 
-  script.
-    let state_status_selector_dropdown = false;
-    function show_status_selector_dropdown() {
-      document.getElementById("status_selector_dropdown").classList.remove("transition","ease-in","opacity-0", "pointer-events-none");
-      document.getElementById("status_selector_dropdown").classList.add("transition","ease-out", "opacity-100");
-      state_status_selector_dropdown = true;
-    }
-    function hide_status_selector_dropdown() {
-      document.getElementById("status_selector_dropdown").classList.remove("transition", "ease-out", "opacity-100");
-      document.getElementById("status_selector_dropdown").classList.add("transition", "ease-in", "opacity-0", "pointer-events-none");
-      state_status_selector_dropdown = false;
-    }
-    function toggle_status_selector_dropdown() {
-        if (state_status_selector_dropdown) {
-            hide_status_selector_dropdown();
-        } else {
-            show_status_selector_dropdown();
+                      .flex-shrink-0
+                        button.inline-flex.items-center.rounded-md.border.border-transparent.bg-emerald-600.px-4.py-2.text-sm.font-medium.text-white.shadow-sm(type='button', class='hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2' onclick="hide_journal()") Close
+        script.
+          document.getElementById("journal_download").addEventListener("click", function(event) {
+            event.preventDefault();
+            let date_s = Date().toString().split(" ")
+            let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            let date = `${date_s[3]}-${months.indexOf(date_s[1])+1}-${date_s[2]}-${date_s[4]}`.replace(":", "_");
+            download(`!{data.service}-${date}`, document.getElementById("journal_text").value)
+          })
+
+          function download(filename, text) {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', `${filename}.txt`);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+          }
+
+          function show_journal() {
+            document.getElementById("journal_backdrop").classList.remove("pointer-events-none", "ease-in","duration-200", "opacity-0")
+            document.getElementById("journal_backdrop").classList.add("ease-out","duration-200", "opacity-100")
+            document.getElementById("journal_panel").classList.remove("ease-in","duration-200","opacity-0","translate-y-4", "sm:translate-y-0", "sm:scale-95")
+            document.getElementById("journal_panel").classList.add("ease-out","duration-200","opacity-100","translate-y-0","sm:scale-100")
+          }
+
+          function hide_journal() {
+            document.getElementById("journal_backdrop").classList.remove("ease-out", "duration-200", "opacity-100")
+            document.getElementById("journal_backdrop").classList.add("pointer-events-none", "ease-in", "duration-200", "opacity-0")
+            document.getElementById("journal_panel").classList.remove("ease-out", "duration-200", "opacity-100", "translate-y-0", "sm:scale-100")
+            document.getElementById("journal_panel").classList.add("ease-in", "duration-200", "opacity-0", "translate-y-4", "sm:translate-y-0", "sm:scale-95")
+          }
+
+          document.getElementById("journal_button_open").addEventListener("click", function(event) {
+            event.preventDefault();
+            journal_load();
+          })
+          document.getElementById("journal_reload").addEventListener("click", function (event) {
+            event.preventDefault();
+            journal_load();
+          })
+
+          function journal_load() {
+            let lines = document.getElementById("journal_lines").value;
+            let reverse = document.getElementById("journal_reverse").checked;
+            console.log(reverse)
+            $.ajax({
+              type: "GET",
+              url: `/api/services/journal?service=!{data.service}&lines=${lines}&reverse=${reverse}`,
+              contentType: "application/json",
+            }).done(function (data, textStatus, xhr) {
+              document.getElementById("journal_text").value = ""
+              data.data.forEach((line) => {
+                document.getElementById("journal_text").value += line + "\n";
+              })
+              show_journal();
+            }).fail(function (data, textStatus, xhr) {
+              document.getElementById("journal_text").value = data.responseJSON.data + "\n\n------------- JSON -------------\n" + JSON.stringify(data.responseJSON, null, 4);
+              show_journal();
+            });
+
+            show_journal();
+          }
+    if (userpermissions.services_stop || userpermissions.services_start || userpermissions.services_restart)
+      .overflow-hidden.bg-white.shadow.mt-5(class='rounded-lg')
+        span.isolate.inline-flex.rounded-md.shadow-sm.w-full.justify-around.p-1
+          button#services_start_button.grow.relative.inline-flex.items-center.rounded-l-md.border.border-gray-300.bg-white.px-2.py-2.text-md.font-medium.text-green-700(disabled=!userpermissions.services_start || data.data["Active"].startsWith("active"), type='button', class='disabled:hover:bg-transparent disabled:text-gray-300 hover:bg-green-50 focus:z-10 focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500')
+            span.w-full Start
+          button#services_stop_button.grow.relative.-ml-px.inline-flex.items-center.border.border-gray-300.bg-white.px-2.py-2.text-md.font-medium.text-red-700(disabled=!userpermissions.services_stop || !data.data["Active"].startsWith("active"), type='button', class='disabled:hover:bg-transparent disabled:text-gray-300 hover:bg-red-50 focus:z-10 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500')
+            span.w-full Stop
+          button#services_restart_button.grow.relative.-ml-px.inline-flex.items-center.rounded-r-md.border.border-gray-300.bg-white.px-2.py-2.text-md.font-medium.text-yellow-700(disabled=!userpermissions.services_restart || !data.data["Active"].startsWith("active"), type='button', class='disabled:hover:bg-transparent disabled:text-gray-300 hover:bg-yellow-50 focus:z-10 focus:border-yellow-500 focus:outline-none focus:ring-1 focus:ring-yellow-500')
+            span.w-full Restart
+      script.
+        function service_actions(operation) {
+          let req_data = {
+            service: "!{data.service}"
+          }
+          $.ajax({
+            type: "PUT",
+            url: `/api/services/${operation}`,
+            contentType: "application/json",
+            data: JSON.stringify(req_data),
+          }).done(function (data, textStatus, xhr) {
+            setTimeout(function() {
+              location.reload();
+            }, 500);
+          }).fail(function (data, textStatus, xhr) {
+
+          });
         }
-    }
-
-    function show_status_details_panel() {
-
-    }
-
-    function hide_status_details_panel() {
-
-    }
-
-    let status_current = null;
-    function status_selected (status) {
-        status_current = status;
-    }
-
-
+      if userpermissions.services_start
+        script.
+          document.getElementById("services_start_button").addEventListener("click", function(event) {
+            event.preventDefault();
+            service_actions("start");
+          })
+      if userpermissions.services_stop
+        script.
+          document.getElementById("services_stop_button").addEventListener("click", function (event) {
+            event.preventDefault();
+            service_actions("stop");
+          })
+      if userpermissions.services_restart
+        script.
+          document.getElementById("services_restart_button").addEventListener("click", function (event) {
+            event.preventDefault();
+            service_actions("restart");
+          })
+  else
+    include includes/error

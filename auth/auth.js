@@ -442,6 +442,11 @@ exports.auth_view = async (req, res, next) => {
         if (err || !role || !user) {
             return res.render('login', { title: 'Login | NSM' });
         }
+        if (role.permissions.admin) {
+            Object.keys(role.permissions).forEach((permission) => {
+                role.permissions[permission] = true;
+            })
+        }
         res.locals.permissions = role.permissions;
         res.locals.username = user.username;
         res.locals.user = {
