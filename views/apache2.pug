@@ -1,7 +1,42 @@
 extends layout
 
-block content
-    if (userpermissions.apache2_config)
+mixin dictViewer(data, inset)
+  .pr-4(class='sm:p-0')
+    table.min-w-full
+      tbody.bg-white
+        each value,key in data
+          if Object.prototype.toString.call(data) == '[object Array]'
+            tr.border-black
+              if typeof value == "string"
+                td.whitespace-nowrap.pr-3.text-sm.text-gray-500=value
+              else
+                td.whitespace-nowrap.pr-3.text-sm.text-gray-500
+                  +dictViewer(value)
+          else
+            tr.border-black.flex
+              td.whitespace-nowrap.pr-3.text-sm.font-medium.text-gray-900.border-black.flex.items-start(class=key=="**args"?"border-b-2":"", style="text-align: top")
+                span=key
+              if typeof value == "string"
+                td.whitespace-nowrap.pr-3.text-sm.text-gray-500.border-black.text-start(class=key=="**args"?"border-b-2":"")
+                  span=value
+              else
+                td.whitespace-nowrap.pr-3.text-sm.text-gray-500
+                  +dictViewer(value, inset+1)
 
-    else
-        include includes/error
+
+
+block content
+  script.
+    let data = !{JSON.stringify(data)}
+    console.log(data.data)
+  if (userpermissions.apache2_config)
+    .overflow-hidden.bg-white.shadow.mt-5(class='rounded-lg')
+      .px-4.py-5(class='sm:px-6')
+        h3.text-lg.font-medium.leading-6.text-gray-900 Apache2 Configuration
+        p.mt-1.max-w-2xl.text-sm.text-gray-500
+      if data.success
+        .px-4(class="sm:px-6")
+          +dictViewer(data.data)
+
+  else
+    include includes/error

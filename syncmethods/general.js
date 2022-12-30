@@ -1,8 +1,8 @@
 const {removeSpaces} = require("./general");
-fs = require("fs");
+const fs = require("fs");
 
 function mapper(data) {
-    data = data.split("\n");
+    data = data.toString().split("\n");
     let array = [];
     for (let i = 0; i < data.length; i++) {
         if (data[i].startsWith("#") || data[i].length == 0) continue;
@@ -32,7 +32,7 @@ function subMapper (sub, args = null) {
             let newSub = [];
             let newKey = sub[i].toString().replace("<", "").replace(">", "").trim().split(" ")[0];
             let newKeyArgs = sub[i].replace(newKey, "").replace(/.*</g, "").replace(/>.*/g, "").trim().removeSpaces();
-            console.log(newKeyArgs)
+
             let regExpEnd = new RegExp(".*<\/.*" + newKey + ".*>.*", "g");
             let closingTag = sub.reIndexOf(regExpEnd, i);
             for (i; i <= closingTag; i++) {
@@ -46,7 +46,27 @@ function subMapper (sub, args = null) {
     return data;
 }
 
-module.exports = { subMapper, mapper }
+async function getFile(path, encoding, fn) {
+    fs.readFile(path, encoding, function (err, data) {
+        let response;
+        if (err) {
+            response = {
+                success: false,
+                message: err.message,
+                data: err,
+            };
+        } else {
+            response = {
+                success: true,
+                message: "Fetched file successfully",
+                data
+            }
+        }
+        fn(response);
+    })
+}
+
+module.exports = { subMapper, mapper, getFile }
 
 String.prototype.removeSpaces = function() {
     return this.replace(/ +(?= )/g, '');
