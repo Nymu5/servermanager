@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  if (userpermissions.terminal_access)
+      .overflow-hidden.bg-black.shadow.mt-5.rounded-lg.min-h-full.h-full
+        iframe(src="https://ssh.nymus.app/").w-full.h-full.min-h-full.p-4
+  else
+    include includes/error

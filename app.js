@@ -12,6 +12,8 @@ var profileRouter = require('./routes/profile');
 var apiRouter = require('./routes/api');
 var servicesRouter = require("./routes/services");
 var apache2Router = require("./routes/apache2");
+var terminalRouter = require("./routes/terminal");
+var filesystemRouter = require('./routes/filesystem');
 var { auth_view, auth_admin} = require('./auth/auth');
 
 var app = express();
@@ -34,6 +36,8 @@ app.use('/admin', auth_view, adminRouter);
 app.use('/users', auth_view, usersRouter);
 app.use('/services', auth_view, servicesRouter);
 app.use('/apache2', auth_view, apache2Router);
+app.use('/terminal', auth_view, terminalRouter);
+app.use('/filesystem', auth_view, filesystemRouter);
 app.get("/logout", (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 })
   res.redirect("/")

@@ -28,40 +28,28 @@ exports.array_move = function(arr, old_index, new_index) {
     return arr; // for testing
 };
 
-exports.mapper = function(error, stdout, stderr, data_processing_function = null){
+exports.mapper = function(error, stdout, stderr, data_processing_function = null, args = null){
     if (error && error.code != 3) {
-        //console.log(error)
-        //console.log(stdout)
-        //console.log(stderr)
         return ({
             status: 500,
             data: `error: ${error.message}`
         })
     }
     if (stderr) {
-        //console.log(error)
-        //console.log(stdout)
-        //console.log(stderr)
         return ({
             status: 500,
             data: `stderr: ${JSON.stringify(stderr)}`
         })
     }
     if (!data_processing_function) {
-        //console.log(error)
-        //console.log(stdout)
-        //console.log(stderr)
         return ({
             status: 200,
             data: stdout,
         })
     }
-    //console.log(error)
-    //console.log(stdout)
-    //console.log(stderr)
     return ({
         status: 200,
-        data: data_processing_function(stdout)
+        data: data_processing_function(stdout, args),
     })
 }
 

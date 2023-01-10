@@ -1,5 +1,7 @@
 const {removeSpaces} = require("./general");
 const fs = require("fs");
+const {exec} = require("child_process");
+const Services = require("./services");
 
 function mapper(data) {
     data = data.toString().split("\n");
@@ -66,7 +68,49 @@ async function getFile(path, encoding, fn) {
     })
 }
 
-module.exports = { subMapper, mapper, getFile }
+function rowsToList(rowsStr) {
+    return rowsStr.split("\n").filter(e => e != "");
+}
+
+async function command(command, fn, mapper = null, args = null) {
+    exec(command, (error, stdout, stderr) => {
+        fn(Services.mapper(error, stdout, stderr, mapper, args));
+    });
+}
+
+function array_concat(array, start, end) {
+    let concat = "";
+    for (let i = start; i <= end; i++) {
+        concat += i == end ? array[i] : array[i]+" ";
+    }
+    return concat;
+}
+
+function path_concat(array) {
+    let concat = "/";
+    for (let i = 0; i < array.length; i++) {
+        concat += array[i] + (i < array.length-1 ? "/" : "");
+    }
+    return concat;
+}
+
+function sortObject(object, property) {
+    let list = [];
+    let res = {};
+    Object.keys(object).forEach((key) => {
+        list.push({
+            key,
+            val: object[key],
+        })
+    })
+    list.sort((a,b) => a.val[property].localeCompare(b.val[property]));
+    list.forEach((item) => {
+        res[item.key] = item.val;
+    })
+    return res;
+}
+
+module.exports = { subMapper, mapper, getFile, command, rowsToList, array_concat, path_concat, sortObject }
 
 String.prototype.removeSpaces = function() {
     return this.replace(/ +(?= )/g, '');
