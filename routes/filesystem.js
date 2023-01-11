@@ -1,5 +1,5 @@
 var express = require('express');
-const {command, rowsToList, sortObject} = require("../syncmethods/general");
+const {command, rowsToList, sortObject, path_concat} = require("../syncmethods/general");
 const {lslMapper} = require("../syncmethods/filesystem");
 var router = express.Router();
 
@@ -9,6 +9,9 @@ router.get('/', function(req, res, next) {
   if (!path) path = "/"
   command(`ls -l ${path}`, (data) => {
     data.path = path;
+    let bpath = path.split("/").filter(f => f !=="");
+    bpath.pop();
+    data.bpath = path_concat(bpath);
     console.log(data)
     res.render('filesystem', { title: 'FileSystem | NSM', header: 'FileSystem', username: res.locals.username, userpermissions: res.locals.permissions, data: data});
   }, lslMapper, path)
