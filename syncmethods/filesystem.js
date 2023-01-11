@@ -1,4 +1,4 @@
-const { array_concat, path_concat, sortObject} = require("./general");
+const { array_concat, path_concat, sortObject, command} = require("./general");
 
 function lslMapper(output, args = null) {
     let oArray = output.split("\n").filter(l => l != "");
@@ -44,5 +44,19 @@ function lslMapper(output, args = null) {
     return data;
 }
 
+function isFile(path, fn) {
+    command(`file ${path}`, (data) => {
+        fn(data, data.data.type === "file");
+    }, (data) => {
+        let res = {};
+        res.output = data;
+        if (data.toString().indexOf("(No such file or directory)") !== -1) res.type = "not found";
+        else if (data.toString().indexOf(": directory") !== -1) res.type = "directory";
+        else if (data.toString().indexOf(": symbolic link") !== -1) res.type = "symbolic link";
+        else res.type = "file";
+        return res;
+    }, path)
+}
 
-module.exports = { lslMapper }
+
+module.exports = { lslMapper, isFile }

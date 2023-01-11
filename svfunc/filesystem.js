@@ -1,5 +1,5 @@
 const { command, rowsToList } = require('../syncmethods/general')
-const {lslMapper} = require("../syncmethods/filesystem");
+const { lslMapper, isFile } = require("../syncmethods/filesystem");
 
 exports.view = async (req, res, next) => {
     let path = req.query.path;
@@ -11,4 +11,15 @@ exports.view = async (req, res, next) => {
             files: data.data,
         })
     }, lslMapper, path)
+}
+
+exports.isfile = async (req, res, status) => {
+    let path = req.query.path;
+    if (!path) path = "/";
+    isFile(path, (data, isFile) => {
+        return res.status(200).json({
+            data,
+            isFile,
+        })
+    })
 }

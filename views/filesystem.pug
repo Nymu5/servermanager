@@ -25,32 +25,40 @@ block content
 
     .overflow-hidden.bg-white.shadow.mt-5.rounded-lg.min-h-full.h-full.max-h-60.overflow-y-auto
       ul.divide-y.divide-gray-200(role='list').overflow-y-auto
-        li
-          a.block(href='?path=' + data.bpath, class='hover:bg-gray-50')
-            .grid.grid-cols-3
-              .flex.text-sm.m-4(class="md:m-2")
-                p.truncate.font-medium.text-emerald-600 ..
-        each object in data.data
+        if data.status < 300 && !data.isFile
           li
-            a.block(href='?path='+(object.type === "symlink" ? object.aspath : object.afpath), class='hover:bg-gray-50')
+            a.block(href='?path=' + data.bpath, class='hover:bg-gray-50')
               .grid.grid-cols-3
                 .flex.text-sm.m-4(class="md:m-2")
-                  p.truncate.font-medium(class=(object.type === "directory" ? "text-emerald-600" : (object.type == "symlink" ? "text-red-300" : "text-black")))=object.name
-                .flex.text-sm.m-4(class="md:m-2")
-                  p.ml-1.flex-shrink-0.font-normal.text-gray-500=(object.type !== "symlink" ? object.permissions : object.aspath)
-                if object.type !== "file"
-                  svg.h-5.w-5.text-gray-400.justify-self-end.m-4(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true' class="md:m-2")
-                    path(fill-rule='evenodd', d='M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z', clip-rule='evenodd')
-              .flex.items-center.px-4.py-2(class='sm:px-6').hidden
-                .min-w-0.flex-1(class='sm:flex sm:items-center sm:justify-between')
-                  .truncate
-                    .flex.text-sm
-                      p.truncate.font-medium(class=(object.type === "directory" ? "text-emerald-600" : (object.type == "symlink" ? "text-red-300" : "text-black")))=object.name
-                      p.ml-1.flex-shrink-0.font-normal.text-gray-500=(object.type !== "symlink" ? object.permissions : object.aspath)
-                .ml-5.flex-shrink-0
+                  p.truncate.font-medium.text-emerald-600 ..
+          each object in data.data
+            li
+              a.block(href='?path='+(object.type === "symlink" ? object.aspath : object.afpath), class='hover:bg-gray-50')
+                .grid.grid-cols-3
+                  .flex.text-sm.m-4(class="md:m-2")
+                    p.truncate.font-medium(class=(object.type === "directory" ? "text-emerald-600" : (object.type == "symlink" ? "text-red-300" : "text-black")))=object.name
+                  .flex.text-sm.m-4(class="md:m-2")
+                    p.ml-1.flex-shrink-0.font-normal.text-gray-500=(object.type !== "symlink" ? object.permissions : object.aspath)
                   if object.type !== "file"
-                    svg.h-5.w-5.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                    svg.h-5.w-5.text-gray-400.justify-self-end.m-4(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true' class="md:m-2")
                       path(fill-rule='evenodd', d='M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z', clip-rule='evenodd')
-
+                .flex.items-center.px-4.py-2(class='sm:px-6').hidden
+                  .min-w-0.flex-1(class='sm:flex sm:items-center sm:justify-between')
+                    .truncate
+                      .flex.text-sm
+                        p.truncate.font-medium(class=(object.type === "directory" ? "text-emerald-600" : (object.type == "symlink" ? "text-red-300" : "text-black")))=object.name
+                        p.ml-1.flex-shrink-0.font-normal.text-gray-500=(object.type !== "symlink" ? object.permissions : object.aspath)
+                  .ml-5.flex-shrink-0
+                    if object.type !== "file"
+                      svg.h-5.w-5.text-gray-400(xmlns='http://www.w3.org/2000/svg', viewBox='0 0 20 20', fill='currentColor', aria-hidden='true')
+                        path(fill-rule='evenodd', d='M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z', clip-rule='evenodd')
+        else if data.status < 300 && data.isFile
+          p Dokument, ich habe keine Lust mehr
+        else
+          -
+            error_code = 500
+            error_title = "An error occurred"
+            error_desc = data.data
+          include includes/error
   else
     include includes/error
