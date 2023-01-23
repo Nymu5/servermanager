@@ -46,7 +46,7 @@ function subMapper (sub, args = null) {
         }
     }
     return data;
-}Ω
+}
 
 async function getFile(path, encoding, fn) {
     fs.readFile(path, encoding, function (err, data) {
